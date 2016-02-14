@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>StudManagProj</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.wst.jsdt.core.javascriptValidator</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.SchemaBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
+		<nature>org.eclipse.pde.PluginNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>resource/Student-Management-System-project.jpg</name>
+			<type>1</type>
+			<location>C:/Users/DELL/Desktop/Student-Management-System-project.jpg</location>
+		</link>
+		<link>
+			<name>resource/download.png</name>
+			<type>1</type>
+			<location>C:/Users/DELL/Desktop/download.png</location>
+		</link>
+		<link>
+			<name>resource/images (1).jpg</name>
+			<type>1</type>
+			<location>C:/Users/DELL/Desktop/images (1).jpg</location>
+		</link>
+		<link>
+			<name>resource/images (6).jpg</name>
+			<type>1</type>
+			<location>C:/Users/DELL/Desktop/images (6).jpg</location>
+		</link>
+		<link>
+			<name>resource/images.png</name>
+			<type>1</type>
+			<location>C:/Users/DELL/Desktop/images.png</location>
+		</link>
+		<link>
+			<name>resource/login_key.jpg</name>
+			<type>1</type>
+			<location>C:/Users/DELL/Desktop/login_key.jpg</location>
+		</link>
+		<link>
+			<name>resource/logout_button_green.png</name>
+			<type>1</type>
+			<location>C:/Users/DELL/Desktop/logout_button_green.png</location>
+		</link>
+		<link>
+			<name>resources/New folder (3)</name>
+			<type>2</type>
+			<location>C:/Users/DELL/Desktop/New folder (3)</location>
+		</link>
+	</linkedResources>
+</projectDescription>
