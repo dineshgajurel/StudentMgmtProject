@@ -1,38 +1,32 @@
 
-import java.awt.BorderLayout;
-
-
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.border.TitledBorder;
-import javax.swing.ButtonGroup;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JRadioButton;
-import javax.swing.ImageIcon;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JScrollPane;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.Font;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import javax.swing.JComboBox;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.sql.SQLException;
+
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import model.Student;
+import dao.StudentDao;
 
 
 
@@ -365,7 +359,31 @@ public class StudentScreen extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
+					String name=new String(nameTxt.getText());
+					String birthdate=new String(birthDate.getText());
+					String roll=new String(rollNo.getText());
+					String f=new String(faculty.getText());
+					String sem=new String(semester.getText());
+					String c=new String(college.getText());
+					String a=new String(address.getText());
+				Student student =new Student();
+				student.setAddress(a);
+				student.setBirthdate(birthdate);
+				try {
+					StudentDao stdDao=new StudentDao();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
+					
+				
+				
+				}
+			
+			
 			});
 			
 		}
