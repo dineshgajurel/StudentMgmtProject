@@ -1,12 +1,17 @@
-
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -28,10 +33,10 @@ import javax.swing.table.DefaultTableModel;
 import model.Student;
 import dao.StudentDao;
 
-
+import java.awt.event.MouseAdapter;
 
 public class StudentScreen extends JFrame {
-
+	Student student = new Student();
 	private JPanel contentPane;
 	private JLabel lblActiveUser;
 	private JLabel activeUser;
@@ -72,31 +77,44 @@ public class StudentScreen extends JFrame {
 	private JLabel lblNewLabel_8;
 	private JLabel lblNewLabel_9;
 	private JLabel lblSearchBy;
-	private JComboBox searchKey;
+	private JComboBox searchby;
 	private JLabel lblNewLabel_10;
+	private JLabel message;
+	private JLabel lblBravoNowYou;
+	private JLabel lblSearchKey;
+	private JTextField searchkey;
+	private JButton search;
+	private JLabel lblDeleteRecentlyAdded;
+	private JButton btnY;
+	private JLabel lblsmssmssmssmssmssms;
+	private JLabel lblYyyymmdd;
+	private JButton btnViewAll;
 
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the frame.
 	 */
 	public StudentScreen() {
 		setTitle("Student Management System(SMS)  \u00A9 Gajurel Dinesh  2016");
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\DELL\\Desktop\\New folder (3)\\Student-Management-System-project.jpg"));
-		
+		setIconImage(Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						"C:\\Users\\DELL\\Desktop\\New folder (3)\\Student-Management-System-project.jpg"));
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 871, 538);
+		setBounds(100, 100, 853, 589);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(0, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -116,8 +134,28 @@ public class StudentScreen extends JFrame {
 		contentPane.add(getLblNewLabel_8());
 		contentPane.add(getLblNewLabel_9());
 		contentPane.add(getLblSearchBy());
-		contentPane.add(getSearchKey());
+		contentPane.add(getSearchby());
 		contentPane.add(getLblNewLabel_10());
+		contentPane.add(getMessage());
+		contentPane.add(getLblBravoNowYou());
+		contentPane.add(getLblSearchKey());
+		contentPane.add(getSearchkey());
+		contentPane.add(getSearch());
+		contentPane.add(getLblDeleteRecentlyAdded());
+		contentPane.add(getBtnY());
+		contentPane.add(getLblsmssmssmssmssmssms());
+		contentPane.add(getBtnViewAll());
+
+		try {
+			// new StudentDao();
+			showAllStudents();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private JLabel getLblActiveUser() {
@@ -131,11 +169,12 @@ public class StudentScreen extends JFrame {
 	public JLabel getActiveUser() {
 		if (activeUser == null) {
 			activeUser = new JLabel();
-			
+			activeUser.setText("User");
+
 			activeUser.setForeground(new Color(30, 144, 255));
 			activeUser.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			activeUser.setBounds(416, 11, 78, 23);
-			
+
 		}
 		return activeUser;
 	}
@@ -145,18 +184,39 @@ public class StudentScreen extends JFrame {
 			logout = new JButton("");
 			logout.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-				StudentScreen studScrs=(StudentScreen)WindowManager.ui.get("StudentScreen");
-				studScrs.dispose();
-				LoginScreen loginScr=(LoginScreen)WindowManager.ui.get("LoginScreen");
-				loginScr.setVisible(true);
-				
-				
-					JOptionPane.showMessageDialog(null, "you have just logged out from the system.. See you later miss/mrs/miss "+activeUser.getText());
+					StudentScreen studScrs = (StudentScreen) WindowManager.ui
+							.get("StudentScreen");
+					studScrs.dispose();
+					LoginScreen loginScr = (LoginScreen) WindowManager.ui
+							.get("LoginScreen");
+					loginScr.setVisible(true);
+
+					JOptionPane.showMessageDialog(null,
+							"you have just logged out from the system.. See you later miss/mrs/miss "
+									+ activeUser.getText());
 				}
 			});
-			logout.setIcon(new ImageIcon("C:\\Users\\DELL\\Desktop\\New folder (3)\\logout_button_green.png"));
+			logout.setIcon(new ImageIcon(
+					"C:\\Users\\DELL\\Desktop\\New folder (3)\\logout_button_green.png"));
 			logout.setBounds(644, 10, 38, 38);
+			// logout.addMouseMotionListener(new MouseMotionListener() {
+			//
+			// @Override
+			// public void mouseMoved(MouseEvent e) {
+			//
+			// JOptionPane.showMessageDialog(null,
+			// "This will redirect you to the login page and terinates your current session ");
+			//
+			// }
+			//
+			// @Override
+			// public void mouseDragged(MouseEvent e) {
+			// // TODO Auto-generated method stub
+			//
+			// }
+			// });
 		}
+
 		return logout;
 	}
 
@@ -165,7 +225,7 @@ public class StudentScreen extends JFrame {
 			studentForm = new JPanel();
 			studentForm.setBorder(new TitledBorder(null, "Student Form",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			studentForm.setBounds(10, 45, 524, 153);
+			studentForm.setBounds(10, 45, 524, 162);
 			studentForm.setLayout(null);
 			studentForm.add(getLblNewLabel());
 			studentForm.add(getNameTxt());
@@ -184,6 +244,7 @@ public class StudentScreen extends JFrame {
 			studentForm.add(getAddress());
 			studentForm.add(getSave());
 			studentForm.add(getLblSave());
+			studentForm.add(getLblYyyymmdd());
 		}
 		return studentForm;
 	}
@@ -208,7 +269,7 @@ public class StudentScreen extends JFrame {
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("Birth Date");
-			lblNewLabel_1.setBounds(169, 28, 58, 14);
+			lblNewLabel_1.setBounds(169, 25, 58, 12);
 		}
 		return lblNewLabel_1;
 	}
@@ -216,7 +277,7 @@ public class StudentScreen extends JFrame {
 	private JTextField getBirthDate() {
 		if (birthDate == null) {
 			birthDate = new JTextField();
-			birthDate.setBounds(237, 25, 99, 20);
+			birthDate.setBounds(261, 25, 97, 24);
 			birthDate.setColumns(10);
 		}
 		return birthDate;
@@ -225,7 +286,7 @@ public class StudentScreen extends JFrame {
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
 			lblNewLabel_2 = new JLabel("Roll No:");
-			lblNewLabel_2.setBounds(353, 25, 52, 14);
+			lblNewLabel_2.setBounds(368, 25, 53, 14);
 		}
 		return lblNewLabel_2;
 	}
@@ -233,7 +294,7 @@ public class StudentScreen extends JFrame {
 	private JTextField getRollNo() {
 		if (rollNo == null) {
 			rollNo = new JTextField();
-			rollNo.setBounds(415, 25, 77, 20);
+			rollNo.setBounds(431, 25, 83, 20);
 			rollNo.setColumns(10);
 		}
 		return rollNo;
@@ -299,13 +360,18 @@ public class StudentScreen extends JFrame {
 			genderPanel.setLayout(null);
 			genderPanel.add(getMale());
 			genderPanel.add(getFemale());
-			ButtonGroup btngrp = new ButtonGroup();
-			btngrp.add(getMale());
-			btngrp.add(getFemale());
+			btngrp();
 
 		}
 		return genderPanel;
 	}
+	
+	public ButtonGroup btngrp(){
+			ButtonGroup btngrp = new ButtonGroup();
+			btngrp.add(getMale());
+			btngrp.add(getFemale());
+			return btngrp;
+			}
 
 	private JRadioButton getMale() {
 		if (male == null) {
@@ -352,66 +418,273 @@ public class StudentScreen extends JFrame {
 	private JButton getSave() {
 		if (save == null) {
 			save = new JButton("");
-			save.setIcon(new ImageIcon("C:\\Users\\DELL\\Desktop\\New folder (3)\\images.png"));
+			save.setIcon(new ImageIcon(
+					"C:\\Users\\DELL\\Desktop\\New folder (3)\\images.png"));
 			save.setBounds(415, 116, 37, 23);
+			// save.addActionListener(new ActionListener() {
+			//
+			// @Override
+			// public void actionPerformed(ActionEvent e) {
+			//
+			//
+			// String n=new String(nameTxt.getText());
+			// String b=new String (birthDate.getText());
+			// String r=new String(rollNo.getText());
+			// String f=new String(faculty.getText());
+			// String s=new String(semester.getText());
+			// String c=new String(college.getText());
+			// String a=new String(address.getText());
+			// String o=new String("E/D");
+			// String g="";
+			//
+			// if(male.isSelected()){
+			// g=new String("Male");
+			// }
+			// if(female.isSelected()){
+			// g=new String("Female");
+			// }
+			//
+			//
+			// Object[] row = {"N/A", n, r,b, a, f,s,c,g,o };
+			//
+			// DefaultTableModel model = (DefaultTableModel)table.getModel();
+			// model.addRow(row);
+			//
+			//
+			// birthDate.setText("");
+			// nameTxt.setText("");
+			// rollNo.setText("");
+			// faculty.setText("");
+			// semester.setText("");
+			// semester.setText("");
+			// college.setText("");
+			// address.setText("");
+			//
+			//
+			// //JOptionPane.showMessageDialog(null,"Do u really think data is submitted??r u commedy me?");
+			// message.setText("Mr/mrs/miss  "
+			// +activeUser.getText()+"  Do u really think data is submitted?? hahahah r u commedy me?");
+			//
+			// //student.setBirthdate(birthdate);
+			// try {
+			// StudentDao stdDao=new StudentDao();
+			// } catch (ClassNotFoundException e1) {
+			// // TODO Auto-generated catch block
+			// e1.printStackTrace();
+			// } catch (SQLException e1) {
+			// // TODO Auto-generated catch block
+			// e1.printStackTrace();
+			// }
+			//
+			//
+			//
+			// }
+			//
+			//
+			// });
+
 			save.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
-					String name=new String(nameTxt.getText());
-					String birthdate=new String(birthDate.getText());
-					String roll=new String(rollNo.getText());
-					String f=new String(faculty.getText());
-					String sem=new String(semester.getText());
-					String c=new String(college.getText());
-					String a=new String(address.getText());
-				Student student =new Student();
-				student.setAddress(a);
-				student.setBirthdate(birthdate);
-				try {
-					StudentDao stdDao=new StudentDao();
-				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					try {
+
+						String g = "";
+						if (male.isSelected() | female.isSelected()) {
+							g = "selected";
+						}
+
+						if (nameTxt.getText().equals("")) {
+
+							message.setText("Name field can't be blank");
+							nameTxt.addFocusListener(new FocusListener() {
+
+								@Override
+								public void focusLost(FocusEvent e) {
+									// TODO Auto-generated method stub
+
+								}
+
+								@Override
+								public void focusGained(FocusEvent e) {
+									// TODO Auto-generated method stub
+
+								}
+							});
+						} else if (birthDate.getText().equals("")) {
+
+							message.setText(" Birth Date field can't be blank");
+						} else if (rollNo.getText().equals("")) {
+
+							message.setText("Roll No field can't be blank");
+						} else if (faculty.getText().equals("")) {
+
+							message.setText("Faculty field can't be blank");
+						} else if (semester.getText().equals("")) {
+
+							message.setText("Semester field can't be blank");
+						} else if (college.getText().equals("")) {
+
+							message.setText("College Name field can't be blank");
+						} else if (g.equals("")) {
+							message.setText("Gender should be selected");
+
+						} else if (address.getText().equals("")) {
+
+							message.setText("Address field can't be blank");
+						} else {
+							Student stud = getStudentFormData();
+							StudentDao stdDao = new StudentDao();
+							stdDao.saveStudent(stud);
+							DefaultTableModel model = (DefaultTableModel) table
+									.getModel();
+							int c = model.getRowCount();
+
+							showAllStudents();
+							DefaultTableModel model1 = (DefaultTableModel) table
+									.getModel();
+							int c1 = model1.getRowCount();
+
+							System.out.println("Previous no of row in table="+c);
+							System.out.println("No of row after adding data ="+c1);
+							if (c1 > c) {
+								message.setText("Data added Succesfully");
+							} else {
+								message.setText("Data cannot be added due to internal database error");
+							}
+							
+							nameTxt.setText("");
+							birthDate.setText("");
+							rollNo.setText("");
+							college.setText("");
+							semester.setText("");
+							address.setText("");
+							faculty.setText("");
+							btngrp().clearSelection();
+							
+						
+						
+						}
+
+					} catch (ParseException | SQLException
+							| ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
-					
-				
-				
-				}
-			
-			
 			});
-			
+
 		}
 		return save;
 	}
 
+	private void showAllStudents() throws ClassNotFoundException, SQLException {
+
+		/*** Clear Table data ***/
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.setRowCount(0); // Clear Table
+
+		/** fetch all students record ***/
+		StudentDao studDao = new StudentDao();
+		List<Student> studentList = studDao.getAllStudents();
+		for (Student stud : studentList) {
+			System.out.println(stud);
+			model.addRow(new Object[] { stud.getId(), stud.getName(),
+					stud.getRollno(), stud.getBirthdate(), stud.getAddress(),
+					stud.getFaculty(),
+
+					stud.getSemester(), stud.getCollege(), stud.getGender(), });
+		}
+	}
+
+	private void showSearchedStudents(String skey, String sby)
+			throws ClassNotFoundException, SQLException {
+
+		/*** Clear Table data ***/
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.setRowCount(0); // Clear Table
+
+		/** fetch searched students record ***/
+		StudentDao studDao = new StudentDao();
+		List<Student> studentList = studDao.getSearchedStudents(skey, sby);
+		for (Student stud : studentList) {
+			System.out.println(stud);
+			model.addRow(new Object[] { stud.getId(), stud.getName(),
+					stud.getRollno(), stud.getBirthdate(), stud.getAddress(),
+					stud.getFaculty(),
+
+					stud.getSemester(), stud.getCollege(), stud.getGender(), });
+		}
+	}
+
+	private Student getStudentFormData() throws ParseException {
+		Student stud = new Student();
+		stud.setName(nameTxt.getText());
+		// stud.setBirthdate(new SimpleDateFormat("YYYY-MM-DD").parse(birthDate
+		// .getText()));
+		stud.setBirthdate(birthDate.getText());
+		stud.setRollno(rollNo.getText());
+		stud.setFaculty(faculty.getText());
+		stud.setSemester(semester.getText());
+		stud.setCollege(college.getText());
+		if (male.isSelected()) {
+			stud.setGender("M");
+		} else if (female.isSelected()) {
+			stud.setGender("F");
+		}
+		stud.setAddress(address.getText());
+		return stud;
+	}
+
 	private JTable getTable() {
+		// int id=1;
+		// String name="Dinesh Gajurel";
+		// String roll="12";
+		// String dob="2051/08/18";
+		// String add="Kushuti";
+		// String faculty="Bsc.csit";
+		// String sem="7th";
+		// String col="Patan multiple campus";
+		//
+
 		if (table == null) {
 			table = new JTable();
 			table.setModel(new DefaultTableModel(new Object[][] {
-					{ null, null, null, null, null, null, null, null },
-					{ null, null, null, null, null, null, null, null },
-					{ null, null, null, null, null, null, null, null },
-					{ null, null, null, null, null, null, null, null },
-					{ null, null, null, null, null, null, null, null },
-					{ null, null, null, null, null, null, null, null },
-					{ null, null, null, null, null, null, null, null }, },
-					new String[] { "ID", "Name", "Roll No", "Date of Birth",
-							"Address", "Faculty", "Semester", "College Name" }));
+
+			}, new String[] { "ID", "Name", "Roll No", "Date of Birth",
+					"Address", "Faculty", "Semester", "College Name", "Gender",
+					"Edit/Delete" }));
 			table.getColumnModel().getColumn(5).setPreferredWidth(56);
+
 		}
 		return table;
+		
+//		int row = table.getSelectedRow();
+//		int column = table.getColumnCount();
+//		for(int i = 0; i < column; i++) {
+//		    System.out.println(table.getValueAt(row, i));
+//		}
+		
+		
+		
 	}
+	
+	
+	
+	
+	
+	
+	
 
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(20, 278, 806, 153);
+			scrollPane.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+			});
+			scrollPane.setBounds(21, 317, 806, 153);
 			scrollPane.setViewportView(getTable());
 		}
 		return scrollPane;
@@ -421,7 +694,7 @@ public class StudentScreen extends JFrame {
 		if (lblNewLabel_5 == null) {
 			lblNewLabel_5 = new JLabel("Student Management System\r\n\r\n\r\n");
 			lblNewLabel_5.setForeground(new Color(30, 144, 255));
-			lblNewLabel_5.setBounds(187, 219, 173, 23);
+			lblNewLabel_5.setBounds(50, 232, 173, 23);
 		}
 		return lblNewLabel_5;
 	}
@@ -430,7 +703,7 @@ public class StudentScreen extends JFrame {
 		if (lblNewLabel_6 == null) {
 			lblNewLabel_6 = new JLabel("Database Section\r\n");
 			lblNewLabel_6.setForeground(new Color(30, 144, 255));
-			lblNewLabel_6.setBounds(397, 219, 137, 23);
+			lblNewLabel_6.setBounds(617, 232, 137, 23);
 		}
 		return lblNewLabel_6;
 	}
@@ -446,8 +719,9 @@ public class StudentScreen extends JFrame {
 	private JButton getExit() {
 		if (exit == null) {
 			exit = new JButton("");
-			exit.setIcon(new ImageIcon("C:\\Users\\DELL\\Desktop\\New folder (3)\\images (6).jpg"));
-			exit.setBounds(764, 434, 31, 31);
+			exit.setIcon(new ImageIcon(
+					"C:\\Users\\DELL\\Desktop\\New folder (3)\\images (6).jpg"));
+			exit.setBounds(766, 491, 31, 31);
 			exit.addActionListener(new ActionListener() {
 
 				@Override
@@ -463,69 +737,277 @@ public class StudentScreen extends JFrame {
 		if (lblExitProgram == null) {
 			lblExitProgram = new JLabel("Exit Program");
 			lblExitProgram.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lblExitProgram.setBounds(644, 442, 110, 23);
+			lblExitProgram.setBounds(644, 499, 110, 23);
 		}
 		return lblExitProgram;
 	}
+
 	private JLabel getLblNewLabel_7() {
 		if (lblNewLabel_7 == null) {
 			lblNewLabel_7 = new JLabel("Copy Right  \u00A9 Gajurel Dinesh 2016");
 			lblNewLabel_7.setFont(new Font("Tahoma", Font.ITALIC, 13));
-			lblNewLabel_7.setBounds(307, 439, 227, 31);
+			lblNewLabel_7.setBounds(307, 469, 227, 31);
 		}
 		return lblNewLabel_7;
 	}
+
 	private JLabel getLblNewLabel_8() {
 		if (lblNewLabel_8 == null) {
-			lblNewLabel_8 = new JLabel("Welcome To  The Student Management System\r\n\r\n");
+			lblNewLabel_8 = new JLabel(
+					"Welcome To  The Student Management System\r\n\r\n");
 			lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 13));
 			lblNewLabel_8.setBounds(10, 11, 315, 27);
 			lblNewLabel_8.addMouseMotionListener(new MouseMotionListener() {
-				
+
 				@Override
 				public void mouseMoved(MouseEvent e) {
 					lblNewLabel_8.setForeground(new Color(30, 144, 255));
-					
+
 				}
-				
+
 				@Override
 				public void mouseDragged(MouseEvent e) {
-					lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 13));				}
+					lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 13));
+				}
 			});
-			
+
 		}
 		return lblNewLabel_8;
 	}
+
 	private JLabel getLblNewLabel_9() {
 		if (lblNewLabel_9 == null) {
 			lblNewLabel_9 = new JLabel("");
-			lblNewLabel_9.setIcon(new ImageIcon("C:\\Users\\DELL\\Desktop\\New folder (3)\\Student-Management-System-project.jpg"));
-			lblNewLabel_9.setBounds(539, 53, 310, 141);
+			lblNewLabel_9
+					.setIcon(new ImageIcon(
+							"C:\\Users\\DELL\\Desktop\\New folder (3)\\Student-Management-System-project.jpg"));
+			lblNewLabel_9.setBounds(539, 53, 276, 162);
 		}
 		return lblNewLabel_9;
 	}
+
 	private JLabel getLblSearchBy() {
 		if (lblSearchBy == null) {
 			lblSearchBy = new JLabel("Search By:");
-			lblSearchBy.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblSearchBy.setBounds(38, 253, 78, 20);
+			lblSearchBy.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lblSearchBy.setBounds(35, 260, 70, 20);
 		}
 		return lblSearchBy;
 	}
-	private JComboBox getSearchKey() {
-		if (searchKey == null) {
-			searchKey = new JComboBox();
-			searchKey.setModel(new DefaultComboBoxModel(new String[] {"ID", "Name", "Roll No", "Date Of Birth", "Address", "College Name", "Faculty", "Semester"}));
-			searchKey.setBounds(126, 246, 114, 27);
+
+	private JComboBox getSearchby() {
+		if (searchby == null) {
+			searchby = new JComboBox();
+			searchby.setModel(new DefaultComboBoxModel(new String[] { "ID",
+					"Name", "Roll No", "Date Of Birth", "Address",
+					"College Name", "Faculty", "Semester", "Gender" }));
+			searchby.setBounds(108, 259, 115, 21);
+			searchby.setSelectedItem("Name");
 		}
-		return searchKey;
+		return searchby;
 	}
+
 	private JLabel getLblNewLabel_10() {
 		if (lblNewLabel_10 == null) {
 			lblNewLabel_10 = new JLabel("Student Management System(SMS)\r\n");
 			lblNewLabel_10.setFont(new Font("Tahoma", Font.ITALIC, 13));
-			lblNewLabel_10.setBounds(307, 465, 211, 23);
+			lblNewLabel_10.setBounds(307, 500, 211, 23);
 		}
 		return lblNewLabel_10;
+	}
+
+	private JLabel getMessage() {
+		if (message == null) {
+			message = new JLabel("");
+
+			message.setForeground(Color.RED);
+			message.setBounds(243, 209, 497, 27);
+		}
+		return message;
+	}
+
+	private JLabel getLblBravoNowYou() {
+		if (lblBravoNowYou == null) {
+			lblBravoNowYou = new JLabel(
+					"Bravo! Now you can search  data according to your requirements (Just by  using category)");
+			lblBravoNowYou.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC,
+					11));
+			lblBravoNowYou.setForeground(new Color(0, 51, 153));
+			lblBravoNowYou.setBounds(308, 251, 519, 29);
+		}
+		return lblBravoNowYou;
+	}
+
+	private JLabel getLblSearchKey() {
+		if (lblSearchKey == null) {
+			lblSearchKey = new JLabel("Search Key:");
+			lblSearchKey.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lblSearchKey.setBounds(35, 290, 78, 23);
+		}
+		return lblSearchKey;
+	}
+
+	private JTextField getSearchkey() {
+		if (searchkey == null) {
+			searchkey = new JTextField();
+			searchkey.setBounds(108, 283, 120, 23);
+			searchkey.setColumns(10);
+		}
+		return searchkey;
+	}
+
+	private JButton getSearch() {
+		if (search == null) {
+			search = new JButton("Search");
+			search.setBounds(228, 283, 78, 23);
+			search.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// message.setText("Sorry!  Working on it ..");
+					String skey = new String(searchkey.getText());
+					String sby = "";
+					String s = (String) searchby.getSelectedItem();
+					if (s.equals("Date Of Birth")) {
+						sby = "birthdate";
+					} else if (s.equals("College Name")) {
+
+						sby = "college";
+					} else if(s.equals("Roll No")){
+						
+						sby="rollno";
+					}else {
+						sby = s.toLowerCase();
+					}
+					try {
+						showSearchedStudents(skey, sby);
+						DefaultTableModel model = (DefaultTableModel) table
+								.getModel();
+						int row = model.getRowCount();
+						if (row == 0) {
+							message.setText("No data where " + s
+									+ " includes  " + skey);
+						} else {
+							message.setText("Here your searched data where  "
+									+ s + " includes " + skey);
+						}
+						searchby.setSelectedItem("Name");
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				}
+			});
+		}
+		return search;
+	}
+
+	private JLabel getLblDeleteRecentlyAdded() {
+		if (lblDeleteRecentlyAdded == null) {
+			lblDeleteRecentlyAdded = new JLabel(
+					"Delete data from the selected row??");
+			lblDeleteRecentlyAdded.setForeground(Color.RED);
+			lblDeleteRecentlyAdded.setBounds(443, 280, 221, 26);
+		}
+		return lblDeleteRecentlyAdded;
+	}
+
+	private JButton getBtnY() {
+		if (btnY == null) {
+			btnY = new JButton("Delete\r\n");
+			btnY.setBounds(658, 283, 70, 23);
+			
+			btnY.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					int row = table.getSelectedRow();
+					Integer a=0;
+					//int column = table.getColumnCount();
+					for(int i = 0; i < 1; i++) {
+					    
+					     a=(int)table.getValueAt(row, i);
+					    
+					}
+					
+					
+					
+					try {
+						StudentDao stdDao = new StudentDao();
+						stdDao.deleteStudent(a);
+						DefaultTableModel model = (DefaultTableModel) table
+								.getModel();
+						int c = model.getRowCount();
+						showAllStudents();
+						
+						int c1 = model.getRowCount();
+						if(c>c1){
+							message.setText("Data is deleted with id =" +a);
+							
+						}
+						System.out.println("Data deleted with id=" +a);
+						
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
+					
+					
+					
+				}
+			});
+		
+		}
+		return btnY;
+	}
+
+	private JLabel getLblsmssmssmssmssmssms() {
+		if (lblsmssmssmssmssmssms == null) {
+			lblsmssmssmssmssmssms = new JLabel(
+					"..........SMS........................SMS..............................SMS.........................SMS....................................................................");
+			lblsmssmssmssmssmssms.setForeground(Color.MAGENTA);
+			lblsmssmssmssmssmssms.setBounds(241, 236, 360, 14);
+		}
+		return lblsmssmssmssmssmssms;
+	}
+
+	private JLabel getLblYyyymmdd() {
+		if (lblYyyymmdd == null) {
+			lblYyyymmdd = new JLabel("(YYYY-MM-DD)");
+			lblYyyymmdd.setBounds(169, 38, 82, 14);
+		}
+		return lblYyyymmdd;
+	}
+	private JButton getBtnViewAll() {
+		if (btnViewAll == null) {
+			btnViewAll = new JButton("View All");
+			btnViewAll.setBounds(318, 283, 89, 23);
+			btnViewAll.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+try {
+	showAllStudents();
+} catch (ClassNotFoundException e1) {
+	// TODO Auto-generated catch block
+	e1.printStackTrace();
+} catch (SQLException e1) {
+	// TODO Auto-generated catch block
+	e1.printStackTrace();
+}					
+				}
+			});
+		}
+		return btnViewAll;
 	}
 }

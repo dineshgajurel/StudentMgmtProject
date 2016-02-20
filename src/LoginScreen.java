@@ -58,8 +58,10 @@ public class LoginScreen extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-       LoginScreen frame=new LoginScreen();
+					Thread.sleep(10000);
+					LoginScreen frame = new LoginScreen();
 					frame.setVisible(true);
+				
 					WindowManager.ui.put("LoginScreen", frame);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -73,7 +75,10 @@ public class LoginScreen extends JFrame {
 	 */
 	public LoginScreen() {
 		setTitle("Login @ Student Management System(SMS)");
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\DELL\\Desktop\\New folder (3)\\key-login-form-22847438.jpg"));
+		setIconImage(Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						"C:\\Users\\DELL\\Desktop\\New folder (3)\\key-login-form-22847438.jpg"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 473, 362);
 		contentPane = new JPanel();
@@ -208,37 +213,43 @@ public class LoginScreen extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String pass = new String(password.getPassword());
-					String usr = new String(username.getText());
-					User user = new User();
-					user.setUsername(usr);
-					user.setPassword(pass);
 
-					UserDao userDao = new UserDao();
-					boolean valid;
-					try {
-						valid = userDao.validateUser(user);
+					if (username.getText().equals("")
+							&& password.getPassword().equals("")) {
+						status.setText("username and password can't be blank.");
+					} else {
+						String pass = new String(password.getPassword());
+						String usr = new String(username.getText());
+						User user = new User();
+						user.setUsername(usr);
+						user.setPassword(pass);
 
-						if (valid) {
-							SwitchWindow();
-							JOptionPane.showMessageDialog(null,
-									"you have successfully entered to the system. Mr/mrs/miss "
-											+ username.getText());
-						} else if (username.getText().equals("")
-								&& pass.equals("")) {
-							status.setText("username and password can't be blank.");
-						} else {
-							status.setText(username.getText()
-									+ "  is not valid username or password is wrong");
-							password.setText("");
+						UserDao userDao = new UserDao();
+						boolean valid;
+						try {
+							valid = userDao.validateUser(user);
 
+							if (valid) {
+								SwitchWindow();
+								JOptionPane.showMessageDialog(null,
+										"you have successfully entered to the system. Mr/mrs/miss "
+												+ username.getText());
+							} else if (username.getText().equals("")
+									&& pass.equals("")) {
+								status.setText("username and password can't be blank.");
+							} else {
+								status.setText(username.getText()
+										+ "  is not valid username or password is wrong");
+								password.setText("");
+
+							}
+
+						} catch (ClassNotFoundException | SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
 
-					} catch (ClassNotFoundException | SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
 					}
-
 				}
 
 			});
@@ -249,7 +260,8 @@ public class LoginScreen extends JFrame {
 	private JButton getCancel() {
 		if (cancel == null) {
 			cancel = new JButton("");
-			cancel.setIcon(new ImageIcon("C:\\Users\\DELL\\Desktop\\New folder (3)\\images (6).jpg"));
+			cancel.setIcon(new ImageIcon(
+					"C:\\Users\\DELL\\Desktop\\New folder (3)\\images (6).jpg"));
 			cancel.setBounds(345, 242, 32, 29);
 			cancel.addActionListener(new ActionListener() {
 
@@ -278,7 +290,8 @@ public class LoginScreen extends JFrame {
 			lblNewLabel_1 = new JLabel("");
 			lblNewLabel_1.setBackground(Color.LIGHT_GRAY);
 			lblNewLabel_1.setForeground(new Color(64, 224, 208));
-			lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\DELL\\Desktop\\New folder (3)\\enter-key.png"));
+			lblNewLabel_1.setIcon(new ImageIcon(
+					"C:\\Users\\DELL\\Desktop\\New folder (3)\\enter-key.png"));
 			lblNewLabel_1.setBounds(238, 11, 134, 154);
 		}
 		return lblNewLabel_1;
