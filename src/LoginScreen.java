@@ -19,10 +19,14 @@ import javax.swing.ImageIcon;
 
 import java.awt.Toolkit;
 import java.awt.Font;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.JCheckBox;
 
+import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
+
+import dao.MySqlConnection;
 import dao.UserDao;
 import model.User;
 
@@ -58,11 +62,22 @@ public class LoginScreen extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Thread.sleep(10000);
-					LoginScreen frame = new LoginScreen();
-					frame.setVisible(true);
+					//MySqlConnection m=new MySqlConnection();
+					Connection c=MySqlConnection.getConnection();
+					String s=c.toString();
+					System.out.println("the string is "+s);
 				
-					WindowManager.ui.put("LoginScreen", frame);
+				if(s.equals("")){
+					
+					System.out.println("Connection failed");
+				
+					
+				}else{Thread.sleep(4000);
+				LoginScreen frame = new LoginScreen();
+				frame.setVisible(true);
+				
+				WindowManager.ui.put("LoginScreen", frame);
+				}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

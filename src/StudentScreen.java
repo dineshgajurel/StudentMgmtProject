@@ -36,6 +36,7 @@ import dao.StudentDao;
 import java.awt.event.MouseAdapter;
 
 public class StudentScreen extends JFrame {
+	//static int id;
 	Student student = new Student();
 	private JPanel contentPane;
 	private JLabel lblActiveUser;
@@ -89,19 +90,25 @@ public class StudentScreen extends JFrame {
 	private JLabel lblsmssmssmssmssmssms;
 	private JLabel lblYyyymmdd;
 	private JButton btnViewAll;
+	private JButton btnEdit;
+	private JLabel lblEdit;
+	private JButton edit;
+	private JButton cancel;
+	private JButton btnClear;
+	private JTextField i;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -145,6 +152,8 @@ public class StudentScreen extends JFrame {
 		contentPane.add(getBtnY());
 		contentPane.add(getLblsmssmssmssmssmssms());
 		contentPane.add(getBtnViewAll());
+		contentPane.add(getBtnEdit());
+		contentPane.add(getBtnClear());
 
 		try {
 			// new StudentDao();
@@ -245,6 +254,10 @@ public class StudentScreen extends JFrame {
 			studentForm.add(getSave());
 			studentForm.add(getLblSave());
 			studentForm.add(getLblYyyymmdd());
+			studentForm.add(getLblEdit());
+			studentForm.add(getEdit());
+			studentForm.add(getCancel());
+			studentForm.add(getI());
 		}
 		return studentForm;
 	}
@@ -409,7 +422,7 @@ public class StudentScreen extends JFrame {
 	private JTextField getAddress() {
 		if (address == null) {
 			address = new JTextField();
-			address.setBounds(250, 112, 109, 23);
+			address.setBounds(250, 112, 102, 23);
 			address.setColumns(10);
 		}
 		return address;
@@ -420,7 +433,7 @@ public class StudentScreen extends JFrame {
 			save = new JButton("");
 			save.setIcon(new ImageIcon(
 					"C:\\Users\\DELL\\Desktop\\New folder (3)\\images.png"));
-			save.setBounds(415, 116, 37, 23);
+			save.setBounds(393, 116, 37, 20);
 			// save.addActionListener(new ActionListener() {
 			//
 			// @Override
@@ -496,42 +509,29 @@ public class StudentScreen extends JFrame {
 
 						if (nameTxt.getText().equals("")) {
 
-							message.setText("Name field can't be blank");
-							nameTxt.addFocusListener(new FocusListener() {
-
-								@Override
-								public void focusLost(FocusEvent e) {
-									// TODO Auto-generated method stub
-
-								}
-
-								@Override
-								public void focusGained(FocusEvent e) {
-									// TODO Auto-generated method stub
-
-								}
-							});
+							showMessage("Name field can't be blank");
+							
 						} else if (birthDate.getText().equals("")) {
 
-							message.setText(" Birth Date field can't be blank");
+							showMessage(" Birth Date field can't be blank");
 						} else if (rollNo.getText().equals("")) {
 
-							message.setText("Roll No field can't be blank");
+							showMessage("Roll No field can't be blank");
 						} else if (faculty.getText().equals("")) {
 
-							message.setText("Faculty field can't be blank");
+							showMessage("Faculty field can't be blank");
 						} else if (semester.getText().equals("")) {
 
-							message.setText("Semester field can't be blank");
+							showMessage("Semester field can't be blank");
 						} else if (college.getText().equals("")) {
 
-							message.setText("College Name field can't be blank");
+							showMessage("College Name field can't be blank");
 						} else if (g.equals("")) {
-							message.setText("Gender should be selected");
+							showMessage("Gender should be selected");
 
 						} else if (address.getText().equals("")) {
 
-							message.setText("Address field can't be blank");
+							showMessage("Address field can't be blank");
 						} else {
 							Student stud = getStudentFormData();
 							StudentDao stdDao = new StudentDao();
@@ -548,19 +548,12 @@ public class StudentScreen extends JFrame {
 							System.out.println("Previous no of row in table="+c);
 							System.out.println("No of row after adding data ="+c1);
 							if (c1 > c) {
-								message.setText("Data added Succesfully");
+								showMessage("Data added Succesfully");
 							} else {
 								message.setText("Data cannot be added due to internal database error");
 							}
 							
-							nameTxt.setText("");
-							birthDate.setText("");
-							rollNo.setText("");
-							college.setText("");
-							semester.setText("");
-							address.setText("");
-							faculty.setText("");
-							btngrp().clearSelection();
+							clearform();
 							
 						
 						
@@ -635,6 +628,33 @@ public class StudentScreen extends JFrame {
 		stud.setAddress(address.getText());
 		return stud;
 	}
+	
+	private Student getUpdateStudentFormData() throws ParseException {
+	
+		Student stud = new Student();
+		String s=i.getText();
+		int in=Integer.parseInt(s);
+		stud.setId(in);
+		stud.setName(nameTxt.getText());
+		// stud.setBirthdate(new SimpleDateFormat("YYYY-MM-DD").parse(birthDate
+		// .getText()));
+		stud.setBirthdate(birthDate.getText());
+		stud.setRollno(rollNo.getText());
+		stud.setFaculty(faculty.getText());
+		stud.setSemester(semester.getText());
+		stud.setCollege(college.getText());
+		if (male.isSelected()) {
+			stud.setGender("M");
+		} else if (female.isSelected()) {
+			stud.setGender("F");
+		}
+		stud.setAddress(address.getText());
+		return stud;
+	}
+
+	
+	
+	
 
 	private JTable getTable() {
 		// int id=1;
@@ -711,7 +731,7 @@ public class StudentScreen extends JFrame {
 	private JLabel getLblSave() {
 		if (lblSave == null) {
 			lblSave = new JLabel("Save:");
-			lblSave.setBounds(369, 116, 37, 23);
+			lblSave.setBounds(357, 112, 37, 23);
 		}
 		return lblSave;
 	}
@@ -885,13 +905,14 @@ public class StudentScreen extends JFrame {
 								.getModel();
 						int row = model.getRowCount();
 						if (row == 0) {
-							message.setText("No data where " + s
+							showMessage("No data where " + s
 									+ " includes  " + skey);
 						} else {
-							message.setText("Here your searched data where  "
+							showMessage("Here your searched data where  "
 									+ s + " includes " + skey);
 						}
 						searchby.setSelectedItem("Name");
+						searchkey.setText("");
 					} catch (ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -909,9 +930,9 @@ public class StudentScreen extends JFrame {
 	private JLabel getLblDeleteRecentlyAdded() {
 		if (lblDeleteRecentlyAdded == null) {
 			lblDeleteRecentlyAdded = new JLabel(
-					"Delete data from the selected row??");
+					"Edit/Delete data from the selected row??");
 			lblDeleteRecentlyAdded.setForeground(Color.RED);
-			lblDeleteRecentlyAdded.setBounds(443, 280, 221, 26);
+			lblDeleteRecentlyAdded.setBounds(416, 280, 252, 26);
 		}
 		return lblDeleteRecentlyAdded;
 	}
@@ -919,7 +940,7 @@ public class StudentScreen extends JFrame {
 	private JButton getBtnY() {
 		if (btnY == null) {
 			btnY = new JButton("Delete\r\n");
-			btnY.setBounds(658, 283, 70, 23);
+			btnY.setBounds(757, 283, 70, 23);
 			
 			btnY.addActionListener(new ActionListener() {
 				
@@ -945,9 +966,10 @@ public class StudentScreen extends JFrame {
 						int c = model.getRowCount();
 						showAllStudents();
 						
+						
 						int c1 = model.getRowCount();
 						if(c>c1){
-							message.setText("Data is deleted with id =" +a);
+							showMessage("Data is deleted with id =" +a);
 							
 						}
 						System.out.println("Data deleted with id=" +a);
@@ -991,7 +1013,7 @@ public class StudentScreen extends JFrame {
 	private JButton getBtnViewAll() {
 		if (btnViewAll == null) {
 			btnViewAll = new JButton("View All");
-			btnViewAll.setBounds(318, 283, 89, 23);
+			btnViewAll.setBounds(307, 283, 94, 23);
 			btnViewAll.addActionListener(new ActionListener() {
 				
 				@Override
@@ -1009,5 +1031,251 @@ try {
 			});
 		}
 		return btnViewAll;
+	}
+	private JButton getBtnEdit() {
+		if (btnEdit == null) {
+			btnEdit = new JButton("edit");
+			btnEdit.setBounds(678, 283, 70, 23);
+			btnEdit.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					
+					
+					save.setVisible(false);
+					lblSave.setVisible(false);
+					edit.setVisible(true);
+					lblEdit.setVisible(true);
+					cancel.setVisible(true);
+					
+					int row = table.getSelectedRow();
+					
+					String a="";
+					String s="";
+					Integer int1=0;
+					
+					//int column = table.getColumnCount();
+					
+					for(int i = 0; i < 1; i++) {
+					    
+					     int1=(Integer)table.getValueAt(row, i);
+					    s =int1.toString();
+					    
+					}
+					i.setText(s);
+					
+					
+					for(int i = 1; i < 2; i++) {
+					    
+					     a=(String)table.getValueAt(row, i);
+					    
+					}
+					nameTxt.setText(a);
+					
+					for(int i = 2; i < 3; i++) {
+					    
+					     a=(String)table.getValueAt(row, i);
+					    
+					}
+					rollNo.setText(a);
+					for(int i = 3; i < 4; i++) {
+					    
+					     a=(String)table.getValueAt(row, i);
+					    
+					}
+					birthDate.setText(a);
+					for(int i = 4; i < 5; i++) {
+					    
+					     a=(String)table.getValueAt(row, i);
+					    
+					}
+					address.setText(a);
+					for(int i = 5; i < 6; i++) {
+					    
+					     a=(String)table.getValueAt(row, i);
+					    
+					}
+					faculty.setText(a);
+					for(int i = 6; i < 7; i++) {
+					    
+					     a=(String)table.getValueAt(row, i);
+					    
+					}
+					semester.setText(a);
+					for(int i = 7; i < 8; i++) {
+					    
+					     a=(String)table.getValueAt(row, i);
+					    
+					}
+					college.setText(a);
+					for(int i = 8; i < 9; i++) {
+					    
+					     a=(String)table.getValueAt(row, i);
+					    
+					}
+					
+					if(a.equals("M")){
+						
+					male.setSelected(true);
+					
+					}
+					else if(a.equals("F")){
+						
+						female.setSelected(true);
+					}
+					
+					showMessage("You selected the data with id= "+s+" to edit. ");
+				}
+				
+			});
+		}
+		return btnEdit;
+	}
+	private JLabel getLblEdit() {
+		if (lblEdit == null) {
+			lblEdit = new JLabel("Edit");
+			lblEdit.setBounds(368, 116, 46, 14);
+			lblEdit.setVisible(false);
+			
+		}
+		return lblEdit;
+	}
+	private JButton getEdit() {
+		if (edit == null) {
+			edit = new JButton("");
+			edit.setIcon(new ImageIcon("C:\\Users\\DELL\\Desktop\\New folder (3)\\images.png"));
+			edit.setBounds(393, 116, 37, 20);
+			edit.setVisible(false);
+			edit.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					
+					try {
+						
+						
+						String g = "";
+						if (male.isSelected() | female.isSelected()) {
+							g = "selected";
+						}
+
+						if (nameTxt.getText().equals("")) {
+
+							showMessage("Name field can't be blank");
+							
+						} else if (birthDate.getText().equals("")) {
+
+							showMessage(" Birth Date field can't be blank");
+						} else if (rollNo.getText().equals("")) {
+
+							showMessage("Roll No field can't be blank");
+						} else if (faculty.getText().equals("")) {
+
+							showMessage("Faculty field can't be blank");
+						} else if (semester.getText().equals("")) {
+
+							showMessage("Semester field can't be blank");
+						} else if (college.getText().equals("")) {
+
+							showMessage("College Name field can't be blank");
+						} else if (g.equals("")) {
+							showMessage("Gender should be selected");
+
+						} else if (address.getText().equals("")) {
+
+							showMessage("Address field can't be blank");
+						}else{
+						
+						Student stud = getUpdateStudentFormData();
+						StudentDao stdDao = new StudentDao();
+						stdDao.updateStudent(stud);
+						showAllStudents();
+						clearform();
+						lblEdit.setVisible(false);
+						lblSave.setVisible(true);
+						edit.setVisible(false);
+						save.setVisible(true);
+						showMessage("Data edited successfully");
+						}
+						
+					} catch (ParseException|SQLException|ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				}
+			});
+		}
+		return edit;
+	}
+	private JButton getCancel() {
+		if (cancel == null) {
+			cancel = new JButton("Cancel");
+			cancel.setBounds(440, 112, 74, 23);
+			
+			cancel.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					clearform();
+					i.setVisible(false);
+					lblEdit.setVisible(false);
+					edit.setVisible(false);
+					save.setVisible(true);
+					lblSave.setVisible(true);
+					//cancel.setVisible(false);
+					
+				}
+			});
+		}
+		return cancel;
+	}
+public void clearform(){
+	i.setText("");
+	nameTxt.setText("");
+	birthDate.setText("");
+	rollNo.setText("");
+	college.setText("");
+	semester.setText("");
+	address.setText("");
+	faculty.setText("");
+	btngrp().clearSelection();
+}
+public void showMessage(String m){
+	message.setText(m);
+	btnClear.setVisible(true);
+	
+}
+	
+	private JButton getBtnClear() {
+		if (btnClear == null) {
+			btnClear = new JButton("clear");
+			btnClear.setForeground(Color.RED);
+			btnClear.setBounds(174, 212, 64, 20);
+			btnClear.setVisible(false);
+			btnClear.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					message.setText("");
+					btnClear.setVisible(false);
+					
+				}
+			});
+			
+			
+		}
+		return btnClear;
+	}
+	private JTextField getI() {
+		if (i == null) {
+			i = new JTextField();
+			i.setBounds(104, 11, 46, 12);
+			i.setColumns(10);
+			i.setVisible(false);
+		}
+		return i;
 	}
 }

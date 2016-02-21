@@ -36,8 +36,31 @@ public class StudentDao {
 		stat.setString(7, stud.getSemester());
 		stat.setString(8, stud.getCollege());
 		stat.setString(9, stud.getGender());
+		System.out.println(",,,"+stud.getName());
 
 		stat.executeUpdate();
+		
+	}
+	public void updateStudent(Student stud) throws SQLException {
+
+		PreparedStatement stat = conn
+				.prepareStatement("update student set name=?,address=?,birthdate=?,rollno=?,faculty=?,semester=?,college=?,gender=? where id =?");
+		
+		stat.setString(1, stud.getName());
+		stat.setString(2, stud.getAddress());
+		// stat.setDate(4, new java.sql.Date(stud.getBirthdate().getTime()));
+		stat.setString(3, stud.getBirthdate());
+		stat.setString(4, stud.getRollno());
+		stat.setString(5, stud.getFaculty());
+		stat.setString(6, stud.getSemester());
+		stat.setString(7, stud.getCollege());
+		stat.setString(8, stud.getGender());
+		stat.setInt(9, stud.getId());
+		
+
+		stat.executeUpdate();
+		
+		
 	}
 
 	public List<Student> getAllStudents() {
