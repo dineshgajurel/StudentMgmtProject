@@ -4,13 +4,11 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -26,6 +24,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -33,10 +32,8 @@ import javax.swing.table.DefaultTableModel;
 import model.Student;
 import dao.StudentDao;
 
-import java.awt.event.MouseAdapter;
-
 public class StudentScreen extends JFrame {
-	//static int id;
+	// static int id;
 	Student student = new Student();
 	private JPanel contentPane;
 	private JLabel lblActiveUser;
@@ -86,7 +83,7 @@ public class StudentScreen extends JFrame {
 	private JTextField searchkey;
 	private JButton search;
 	private JLabel lblDeleteRecentlyAdded;
-	private JButton btnY;
+	private JButton delete;
 	private JLabel lblsmssmssmssmssmssms;
 	private JLabel lblYyyymmdd;
 	private JButton btnViewAll;
@@ -149,7 +146,7 @@ public class StudentScreen extends JFrame {
 		contentPane.add(getSearchkey());
 		contentPane.add(getSearch());
 		contentPane.add(getLblDeleteRecentlyAdded());
-		contentPane.add(getBtnY());
+		contentPane.add(getDelete());
 		contentPane.add(getLblsmssmssmssmssmssms());
 		contentPane.add(getBtnViewAll());
 		contentPane.add(getBtnEdit());
@@ -206,7 +203,7 @@ public class StudentScreen extends JFrame {
 				}
 			});
 			logout.setIcon(new ImageIcon(
-					"C:\\Users\\DELL\\Desktop\\New folder (3)\\logout_button_green.png"));
+					"resource/images/logout_button_green.png"));
 			logout.setBounds(644, 10, 38, 38);
 			// logout.addMouseMotionListener(new MouseMotionListener() {
 			//
@@ -378,13 +375,13 @@ public class StudentScreen extends JFrame {
 		}
 		return genderPanel;
 	}
-	
-	public ButtonGroup btngrp(){
-			ButtonGroup btngrp = new ButtonGroup();
-			btngrp.add(getMale());
-			btngrp.add(getFemale());
-			return btngrp;
-			}
+
+	private ButtonGroup btngrp() {
+		ButtonGroup btngrp = new ButtonGroup();
+		btngrp.add(getMale());
+		btngrp.add(getFemale());
+		return btngrp;
+	}
 
 	private JRadioButton getMale() {
 		if (male == null) {
@@ -431,70 +428,9 @@ public class StudentScreen extends JFrame {
 	private JButton getSave() {
 		if (save == null) {
 			save = new JButton("");
-			save.setIcon(new ImageIcon(
-					"C:\\Users\\DELL\\Desktop\\New folder (3)\\images.png"));
+			save.setIcon(new ImageIcon("resource/images/tick.png"));
 			save.setBounds(393, 116, 37, 20);
-			// save.addActionListener(new ActionListener() {
-			//
-			// @Override
-			// public void actionPerformed(ActionEvent e) {
-			//
-			//
-			// String n=new String(nameTxt.getText());
-			// String b=new String (birthDate.getText());
-			// String r=new String(rollNo.getText());
-			// String f=new String(faculty.getText());
-			// String s=new String(semester.getText());
-			// String c=new String(college.getText());
-			// String a=new String(address.getText());
-			// String o=new String("E/D");
-			// String g="";
-			//
-			// if(male.isSelected()){
-			// g=new String("Male");
-			// }
-			// if(female.isSelected()){
-			// g=new String("Female");
-			// }
-			//
-			//
-			// Object[] row = {"N/A", n, r,b, a, f,s,c,g,o };
-			//
-			// DefaultTableModel model = (DefaultTableModel)table.getModel();
-			// model.addRow(row);
-			//
-			//
-			// birthDate.setText("");
-			// nameTxt.setText("");
-			// rollNo.setText("");
-			// faculty.setText("");
-			// semester.setText("");
-			// semester.setText("");
-			// college.setText("");
-			// address.setText("");
-			//
-			//
-			// //JOptionPane.showMessageDialog(null,"Do u really think data is submitted??r u commedy me?");
-			// message.setText("Mr/mrs/miss  "
-			// +activeUser.getText()+"  Do u really think data is submitted?? hahahah r u commedy me?");
-			//
-			// //student.setBirthdate(birthdate);
-			// try {
-			// StudentDao stdDao=new StudentDao();
-			// } catch (ClassNotFoundException e1) {
-			// // TODO Auto-generated catch block
-			// e1.printStackTrace();
-			// } catch (SQLException e1) {
-			// // TODO Auto-generated catch block
-			// e1.printStackTrace();
-			// }
-			//
-			//
-			//
-			// }
-			//
-			//
-			// });
+			
 
 			save.addActionListener(new ActionListener() {
 
@@ -510,7 +446,7 @@ public class StudentScreen extends JFrame {
 						if (nameTxt.getText().equals("")) {
 
 							showMessage("Name field can't be blank");
-							
+
 						} else if (birthDate.getText().equals("")) {
 
 							showMessage(" Birth Date field can't be blank");
@@ -545,18 +481,18 @@ public class StudentScreen extends JFrame {
 									.getModel();
 							int c1 = model1.getRowCount();
 
-							System.out.println("Previous no of row in table="+c);
-							System.out.println("No of row after adding data ="+c1);
+							System.out.println("Previous no of row in table="
+									+ c);
+							System.out.println("No of row after adding data ="
+									+ c1);
 							if (c1 > c) {
 								showMessage("Data added Succesfully");
 							} else {
 								message.setText("Data cannot be added due to internal database error");
 							}
-							
+
 							clearform();
-							
-						
-						
+
 						}
 
 					} catch (ParseException | SQLException
@@ -628,12 +564,12 @@ public class StudentScreen extends JFrame {
 		stud.setAddress(address.getText());
 		return stud;
 	}
-	
+
 	private Student getUpdateStudentFormData() throws ParseException {
-	
+
 		Student stud = new Student();
-		String s=i.getText();
-		int in=Integer.parseInt(s);
+		String s = i.getText();
+		int in = Integer.parseInt(s);
 		stud.setId(in);
 		stud.setName(nameTxt.getText());
 		// stud.setBirthdate(new SimpleDateFormat("YYYY-MM-DD").parse(birthDate
@@ -652,20 +588,7 @@ public class StudentScreen extends JFrame {
 		return stud;
 	}
 
-	
-	
-	
-
 	private JTable getTable() {
-		// int id=1;
-		// String name="Dinesh Gajurel";
-		// String roll="12";
-		// String dob="2051/08/18";
-		// String add="Kushuti";
-		// String faculty="Bsc.csit";
-		// String sem="7th";
-		// String col="Patan multiple campus";
-		//
 
 		if (table == null) {
 			table = new JTable();
@@ -678,23 +601,8 @@ public class StudentScreen extends JFrame {
 
 		}
 		return table;
-		
-//		int row = table.getSelectedRow();
-//		int column = table.getColumnCount();
-//		for(int i = 0; i < column; i++) {
-//		    System.out.println(table.getValueAt(row, i));
-//		}
-		
-		
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
 
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
@@ -739,8 +647,7 @@ public class StudentScreen extends JFrame {
 	private JButton getExit() {
 		if (exit == null) {
 			exit = new JButton("");
-			exit.setIcon(new ImageIcon(
-					"C:\\Users\\DELL\\Desktop\\New folder (3)\\images (6).jpg"));
+			exit.setIcon(new ImageIcon("resource/images/cross.jpg"));
 			exit.setBounds(766, 491, 31, 31);
 			exit.addActionListener(new ActionListener() {
 
@@ -798,9 +705,7 @@ public class StudentScreen extends JFrame {
 	private JLabel getLblNewLabel_9() {
 		if (lblNewLabel_9 == null) {
 			lblNewLabel_9 = new JLabel("");
-			lblNewLabel_9
-					.setIcon(new ImageIcon(
-							"C:\\Users\\DELL\\Desktop\\New folder (3)\\Student-Management-System-project.jpg"));
+			lblNewLabel_9.setIcon(new ImageIcon("resource/images/std.jpg"));
 			lblNewLabel_9.setBounds(539, 53, 276, 162);
 		}
 		return lblNewLabel_9;
@@ -884,20 +789,20 @@ public class StudentScreen extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// message.setText("Sorry!  Working on it ..");
+
 					String skey = new String(searchkey.getText());
-					String sby = "";
-					String s = (String) searchby.getSelectedItem();
-					if (s.equals("Date Of Birth")) {
+
+					String sby = (String) searchby.getSelectedItem();
+					if (sby.equals("Date Of Birth")) {
 						sby = "birthdate";
-					} else if (s.equals("College Name")) {
+					} else if (sby.equals("College Name")) {
 
 						sby = "college";
-					} else if(s.equals("Roll No")){
-						
-						sby="rollno";
-					}else {
-						sby = s.toLowerCase();
+					} else if (sby.equals("Roll No")) {
+
+						sby = "rollno";
+					} else {
+						sby = sby.toLowerCase();
 					}
 					try {
 						showSearchedStudents(skey, sby);
@@ -905,11 +810,11 @@ public class StudentScreen extends JFrame {
 								.getModel();
 						int row = model.getRowCount();
 						if (row == 0) {
-							showMessage("No data where " + s
-									+ " includes  " + skey);
+							showMessage("No data where " + sby + " includes  "
+									+ skey);
 						} else {
-							showMessage("Here your searched data where  "
-									+ s + " includes " + skey);
+							showMessage("Here your searched data where  " + sby
+									+ " includes " + skey);
 						}
 						searchby.setSelectedItem("Name");
 						searchkey.setText("");
@@ -937,27 +842,25 @@ public class StudentScreen extends JFrame {
 		return lblDeleteRecentlyAdded;
 	}
 
-	private JButton getBtnY() {
-		if (btnY == null) {
-			btnY = new JButton("Delete\r\n");
-			btnY.setBounds(757, 283, 70, 23);
-			
-			btnY.addActionListener(new ActionListener() {
-				
+	private JButton getDelete() {
+		if (delete == null) {
+			delete = new JButton("Delete\r\n");
+			delete.setBounds(757, 283, 70, 23);
+
+			delete.addActionListener(new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
+
 					int row = table.getSelectedRow();
-					Integer a=0;
-					//int column = table.getColumnCount();
-					for(int i = 0; i < 1; i++) {
-					    
-					     a=(int)table.getValueAt(row, i);
-					    
+					Integer a = 0;
+					// int column = table.getColumnCount();
+					for (int i = 0; i < 1; i++) {
+
+						a = (int) table.getValueAt(row, i);
+
 					}
-					
-					
-					
+
 					try {
 						StudentDao stdDao = new StudentDao();
 						stdDao.deleteStudent(a);
@@ -965,15 +868,16 @@ public class StudentScreen extends JFrame {
 								.getModel();
 						int c = model.getRowCount();
 						showAllStudents();
-						
-						
+
 						int c1 = model.getRowCount();
-						if(c>c1){
-							showMessage("Data is deleted with id =" +a);
-							
+						if (c > c1) {
+							showMessage("Data is deleted with id =" + a);
+
+						} else {
+							showMessage("Sorry..");
 						}
-						System.out.println("Data deleted with id=" +a);
-						
+						System.out.println("Data deleted with id=" + a);
+
 					} catch (ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -981,16 +885,12 @@ public class StudentScreen extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
-					
-					
-					
-					
+
 				}
 			});
-		
+
 		}
-		return btnY;
+		return delete;
 	}
 
 	private JLabel getLblsmssmssmssmssmssms() {
@@ -1010,152 +910,150 @@ public class StudentScreen extends JFrame {
 		}
 		return lblYyyymmdd;
 	}
+
 	private JButton getBtnViewAll() {
 		if (btnViewAll == null) {
 			btnViewAll = new JButton("View All");
 			btnViewAll.setBounds(307, 283, 94, 23);
 			btnViewAll.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-try {
-	showAllStudents();
-} catch (ClassNotFoundException e1) {
-	// TODO Auto-generated catch block
-	e1.printStackTrace();
-} catch (SQLException e1) {
-	// TODO Auto-generated catch block
-	e1.printStackTrace();
-}					
+					try {
+						showAllStudents();
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 		}
 		return btnViewAll;
 	}
+
 	private JButton getBtnEdit() {
 		if (btnEdit == null) {
 			btnEdit = new JButton("edit");
 			btnEdit.setBounds(678, 283, 70, 23);
 			btnEdit.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
-					
-					
+
 					save.setVisible(false);
 					lblSave.setVisible(false);
 					edit.setVisible(true);
 					lblEdit.setVisible(true);
-					cancel.setVisible(true);
-					
+
 					int row = table.getSelectedRow();
-					
-					String a="";
-					String s="";
-					Integer int1=0;
-					
-					//int column = table.getColumnCount();
-					
-					for(int i = 0; i < 1; i++) {
-					    
-					     int1=(Integer)table.getValueAt(row, i);
-					    s =int1.toString();
-					    
+
+					String a = "";
+					String s = "";
+					Integer int1 = 0;
+
+					// int column = table.getColumnCount();
+
+					for (int i = 0; i < 1; i++) {
+
+						int1 = (Integer) table.getValueAt(row, i);
+						s = int1.toString();
+
 					}
 					i.setText(s);
-					
-					
-					for(int i = 1; i < 2; i++) {
-					    
-					     a=(String)table.getValueAt(row, i);
-					    
+
+					for (int i = 1; i < 2; i++) {
+
+						a = (String) table.getValueAt(row, i);
+
 					}
 					nameTxt.setText(a);
-					
-					for(int i = 2; i < 3; i++) {
-					    
-					     a=(String)table.getValueAt(row, i);
-					    
+
+					for (int i = 2; i < 3; i++) {
+
+						a = (String) table.getValueAt(row, i);
+
 					}
 					rollNo.setText(a);
-					for(int i = 3; i < 4; i++) {
-					    
-					     a=(String)table.getValueAt(row, i);
-					    
+					for (int i = 3; i < 4; i++) {
+
+						a = (String) table.getValueAt(row, i);
+
 					}
 					birthDate.setText(a);
-					for(int i = 4; i < 5; i++) {
-					    
-					     a=(String)table.getValueAt(row, i);
-					    
+					for (int i = 4; i < 5; i++) {
+
+						a = (String) table.getValueAt(row, i);
+
 					}
 					address.setText(a);
-					for(int i = 5; i < 6; i++) {
-					    
-					     a=(String)table.getValueAt(row, i);
-					    
+					for (int i = 5; i < 6; i++) {
+
+						a = (String) table.getValueAt(row, i);
+
 					}
 					faculty.setText(a);
-					for(int i = 6; i < 7; i++) {
-					    
-					     a=(String)table.getValueAt(row, i);
-					    
+					for (int i = 6; i < 7; i++) {
+
+						a = (String) table.getValueAt(row, i);
+
 					}
 					semester.setText(a);
-					for(int i = 7; i < 8; i++) {
-					    
-					     a=(String)table.getValueAt(row, i);
-					    
+					for (int i = 7; i < 8; i++) {
+
+						a = (String) table.getValueAt(row, i);
+
 					}
 					college.setText(a);
-					for(int i = 8; i < 9; i++) {
-					    
-					     a=(String)table.getValueAt(row, i);
-					    
+					for (int i = 8; i < 9; i++) {
+
+						a = (String) table.getValueAt(row, i);
+
 					}
-					
-					if(a.equals("M")){
-						
-					male.setSelected(true);
-					
-					}
-					else if(a.equals("F")){
-						
+
+					if (a.equals("M")) {
+
+						male.setSelected(true);
+
+					} else if (a.equals("F")) {
+
 						female.setSelected(true);
 					}
-					
-					showMessage("You selected the data with id= "+s+" to edit. ");
+
+					showMessage("You selected the data with id= " + s
+							+ " to edit. ");
 				}
-				
+
 			});
 		}
 		return btnEdit;
 	}
+
 	private JLabel getLblEdit() {
 		if (lblEdit == null) {
 			lblEdit = new JLabel("Edit");
 			lblEdit.setBounds(368, 116, 46, 14);
 			lblEdit.setVisible(false);
-			
+
 		}
 		return lblEdit;
 	}
+
 	private JButton getEdit() {
 		if (edit == null) {
 			edit = new JButton("");
-			edit.setIcon(new ImageIcon("C:\\Users\\DELL\\Desktop\\New folder (3)\\images.png"));
+			edit.setIcon(new ImageIcon("resource/images/tick.png"));
 			edit.setBounds(393, 116, 37, 20);
 			edit.setVisible(false);
 			edit.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
-					
+
 					try {
-						
-						
+
 						String g = "";
 						if (male.isSelected() | female.isSelected()) {
 							g = "selected";
@@ -1164,7 +1062,7 @@ try {
 						if (nameTxt.getText().equals("")) {
 
 							showMessage("Name field can't be blank");
-							
+
 						} else if (birthDate.getText().equals("")) {
 
 							showMessage(" Birth Date field can't be blank");
@@ -1186,69 +1084,83 @@ try {
 						} else if (address.getText().equals("")) {
 
 							showMessage("Address field can't be blank");
-						}else{
-						
-						Student stud = getUpdateStudentFormData();
-						StudentDao stdDao = new StudentDao();
-						stdDao.updateStudent(stud);
-						showAllStudents();
-						clearform();
-						lblEdit.setVisible(false);
-						lblSave.setVisible(true);
-						edit.setVisible(false);
-						save.setVisible(true);
-						showMessage("Data edited successfully");
+						} else {
+
+							Student stud = getUpdateStudentFormData();
+							StudentDao stdDao = new StudentDao();
+							stdDao.updateStudent(stud);
+							showAllStudents();
+							clearform();
+							lblEdit.setVisible(false);
+							lblSave.setVisible(true);
+							edit.setVisible(false);
+							save.setVisible(true);
+							showMessage("Data edited successfully");
 						}
-						
-					} catch (ParseException|SQLException|ClassNotFoundException e1) {
+
+					} catch (ParseException | SQLException
+							| ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
+
 				}
 			});
 		}
 		return edit;
 	}
+
 	private JButton getCancel() {
 		if (cancel == null) {
 			cancel = new JButton("Cancel");
 			cancel.setBounds(440, 112, 74, 23);
-			
+
 			cancel.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					clearform();
-					i.setVisible(false);
+
 					lblEdit.setVisible(false);
 					edit.setVisible(false);
 					save.setVisible(true);
 					lblSave.setVisible(true);
-					//cancel.setVisible(false);
-					
+
 				}
 			});
 		}
 		return cancel;
 	}
-public void clearform(){
-	i.setText("");
-	nameTxt.setText("");
-	birthDate.setText("");
-	rollNo.setText("");
-	college.setText("");
-	semester.setText("");
-	address.setText("");
-	faculty.setText("");
-	btngrp().clearSelection();
-}
-public void showMessage(String m){
-	message.setText(m);
-	btnClear.setVisible(true);
-	
-}
-	
+
+	private void clearform() {
+		i.setText("");
+		nameTxt.setText("");
+		birthDate.setText("");
+		rollNo.setText("");
+		college.setText("");
+		semester.setText("");
+		address.setText("");
+		faculty.setText("");
+		btngrp().clearSelection();
+	}
+
+	public void showMessage(String m) {
+		message.setText(m);
+		btnClear.setVisible(true);
+
+		Timer t = new Timer(4000, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				message.setText("");
+				btnClear.setVisible(false);
+			}
+		});
+		t.setRepeats(false);
+		t.start();
+
+	}
+
 	private JButton getBtnClear() {
 		if (btnClear == null) {
 			btnClear = new JButton("clear");
@@ -1256,19 +1168,19 @@ public void showMessage(String m){
 			btnClear.setBounds(174, 212, 64, 20);
 			btnClear.setVisible(false);
 			btnClear.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					message.setText("");
 					btnClear.setVisible(false);
-					
+
 				}
 			});
-			
-			
+
 		}
 		return btnClear;
 	}
+
 	private JTextField getI() {
 		if (i == null) {
 			i = new JTextField();
