@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -7,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
@@ -112,10 +113,7 @@ public class StudentScreen extends JFrame {
 	 */
 	public StudentScreen() {
 		setTitle("Student Management System(SMS)  \u00A9 Gajurel Dinesh  2016");
-		setIconImage(Toolkit
-				.getDefaultToolkit()
-				.getImage(
-						"C:\\Users\\DELL\\Desktop\\New folder (3)\\Student-Management-System-project.jpg"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\java-ws\\StudManagProj\\resource\\images\\std.jpg"));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 853, 589);
@@ -190,6 +188,19 @@ public class StudentScreen extends JFrame {
 			logout = new JButton("");
 			logout.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					FileOutputStream fi;
+					try {
+						fi = new FileOutputStream("E:\\sms\\m.txt");
+						String s=new String("");
+						byte b[]=s.getBytes();
+						fi.write(b);
+						fi.close();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
 					StudentScreen studScrs = (StudentScreen) WindowManager.ui
 							.get("StudentScreen");
 					studScrs.dispose();
@@ -197,14 +208,13 @@ public class StudentScreen extends JFrame {
 							.get("LoginScreen");
 					loginScr.setVisible(true);
 
-					JOptionPane.showMessageDialog(null,
-							"you have just logged out from the system.. See you later miss/mrs/miss "
-									+ activeUser.getText());
+//					JOptionPane.showMessageDialog(null,
+//							"you have just logged out from the system.. See you later miss/mrs/miss "
+//									+ activeUser.getText());
 				}
 			});
-			logout.setIcon(new ImageIcon(
-					"resource/images/logout_button_green.png"));
-			logout.setBounds(644, 10, 38, 38);
+			logout.setIcon(new ImageIcon("C:\\java-ws\\StudManagProj\\resource\\images\\logout_button_green.png"));
+			logout.setBounds(716, 11, 38, 38);
 			// logout.addMouseMotionListener(new MouseMotionListener() {
 			//
 			// @Override
@@ -270,7 +280,7 @@ public class StudentScreen extends JFrame {
 	private JTextField getNameTxt() {
 		if (nameTxt == null) {
 			nameTxt = new JTextField();
-			nameTxt.setBounds(57, 25, 102, 20);
+			nameTxt.setBounds(57, 25, 102, 24);
 			nameTxt.setColumns(10);
 		}
 		return nameTxt;
@@ -304,7 +314,7 @@ public class StudentScreen extends JFrame {
 	private JTextField getRollNo() {
 		if (rollNo == null) {
 			rollNo = new JTextField();
-			rollNo.setBounds(431, 25, 83, 20);
+			rollNo.setBounds(431, 25, 83, 24);
 			rollNo.setColumns(10);
 		}
 		return rollNo;
@@ -321,7 +331,7 @@ public class StudentScreen extends JFrame {
 	private JTextField getFaculty() {
 		if (faculty == null) {
 			faculty = new JTextField();
-			faculty.setBounds(57, 60, 86, 20);
+			faculty.setBounds(57, 56, 86, 28);
 			faculty.setColumns(10);
 		}
 		return faculty;
@@ -338,7 +348,7 @@ public class StudentScreen extends JFrame {
 	private JTextField getSemester() {
 		if (semester == null) {
 			semester = new JTextField();
-			semester.setBounds(216, 60, 77, 20);
+			semester.setBounds(216, 60, 77, 24);
 			semester.setColumns(10);
 		}
 		return semester;
@@ -355,7 +365,7 @@ public class StudentScreen extends JFrame {
 	private JTextField getCollege() {
 		if (college == null) {
 			college = new JTextField();
-			college.setBounds(393, 60, 121, 20);
+			college.setBounds(393, 56, 121, 28);
 			college.setColumns(10);
 		}
 		return college;
@@ -395,7 +405,7 @@ public class StudentScreen extends JFrame {
 		if (lblLogOut == null) {
 			lblLogOut = new JLabel("Log Out");
 			lblLogOut.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lblLogOut.setBounds(575, 11, 70, 27);
+			lblLogOut.setBounds(636, 11, 70, 27);
 		}
 		return lblLogOut;
 	}
@@ -419,7 +429,7 @@ public class StudentScreen extends JFrame {
 	private JTextField getAddress() {
 		if (address == null) {
 			address = new JTextField();
-			address.setBounds(250, 112, 102, 23);
+			address.setBounds(250, 112, 102, 24);
 			address.setColumns(10);
 		}
 		return address;
@@ -428,7 +438,7 @@ public class StudentScreen extends JFrame {
 	private JButton getSave() {
 		if (save == null) {
 			save = new JButton("");
-			save.setIcon(new ImageIcon("resource/images/tick.png"));
+			save.setIcon(new ImageIcon("C:\\java-ws\\StudManagProj\\resource\\images\\tick.png"));
 			save.setBounds(393, 116, 37, 20);
 			
 
@@ -475,11 +485,12 @@ public class StudentScreen extends JFrame {
 							DefaultTableModel model = (DefaultTableModel) table
 									.getModel();
 							int c = model.getRowCount();
-
+							
 							showAllStudents();
-							DefaultTableModel model1 = (DefaultTableModel) table
+						DefaultTableModel model1 = (DefaultTableModel) table
 									.getModel();
-							int c1 = model1.getRowCount();
+							int c1 = model.getRowCount();
+							
 
 							System.out.println("Previous no of row in table="
 									+ c);
@@ -488,12 +499,14 @@ public class StudentScreen extends JFrame {
 							if (c1 > c) {
 								showMessage("Data added Succesfully");
 							} else {
-								message.setText("Data cannot be added due to internal database error");
+								showMessage("Data cannot be added due to internal database error");
 							}
 
 							clearform();
 
 						}
+						
+						
 
 					} catch (ParseException | SQLException
 							| ClassNotFoundException e1) {
@@ -517,8 +530,8 @@ public class StudentScreen extends JFrame {
 		StudentDao studDao = new StudentDao();
 		List<Student> studentList = studDao.getAllStudents();
 		for (Student stud : studentList) {
-			System.out.println(stud);
-			model.addRow(new Object[] { stud.getId(), stud.getName(),
+			//System.out.println(stud);
+			model.addRow(new Object[] {stud.getId(), stud.getName(),
 					stud.getRollno(), stud.getBirthdate(), stud.getAddress(),
 					stud.getFaculty(),
 
@@ -537,7 +550,7 @@ public class StudentScreen extends JFrame {
 		StudentDao studDao = new StudentDao();
 		List<Student> studentList = studDao.getSearchedStudents(skey, sby);
 		for (Student stud : studentList) {
-			System.out.println(stud);
+			//System.out.println(stud);
 			model.addRow(new Object[] { stud.getId(), stud.getName(),
 					stud.getRollno(), stud.getBirthdate(), stud.getAddress(),
 					stud.getFaculty(),
@@ -647,13 +660,15 @@ public class StudentScreen extends JFrame {
 	private JButton getExit() {
 		if (exit == null) {
 			exit = new JButton("");
-			exit.setIcon(new ImageIcon("resource/images/cross.jpg"));
+			exit.setIcon(new ImageIcon("C:\\java-ws\\StudManagProj\\resource\\images\\cross.jpg"));
 			exit.setBounds(766, 491, 31, 31);
 			exit.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
+					//System.exit(0);
+					StudentScreen s=(StudentScreen) WindowManager.ui.get("StudentScreen");
+					s.dispose();
 				}
 			});
 		}
@@ -705,7 +720,7 @@ public class StudentScreen extends JFrame {
 	private JLabel getLblNewLabel_9() {
 		if (lblNewLabel_9 == null) {
 			lblNewLabel_9 = new JLabel("");
-			lblNewLabel_9.setIcon(new ImageIcon("resource/images/std.jpg"));
+			lblNewLabel_9.setIcon(new ImageIcon("C:\\java-ws\\StudManagProj\\resource\\images\\std.jpg"));
 			lblNewLabel_9.setBounds(539, 53, 276, 162);
 		}
 		return lblNewLabel_9;
@@ -837,7 +852,7 @@ public class StudentScreen extends JFrame {
 			lblDeleteRecentlyAdded = new JLabel(
 					"Edit/Delete data from the selected row??");
 			lblDeleteRecentlyAdded.setForeground(Color.RED);
-			lblDeleteRecentlyAdded.setBounds(416, 280, 252, 26);
+			lblDeleteRecentlyAdded.setBounds(434, 280, 234, 26);
 		}
 		return lblDeleteRecentlyAdded;
 	}
@@ -921,6 +936,7 @@ public class StudentScreen extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						showAllStudents();
+						showMessage("Here your all data list..");
 					} catch (ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -1044,7 +1060,7 @@ public class StudentScreen extends JFrame {
 	private JButton getEdit() {
 		if (edit == null) {
 			edit = new JButton("");
-			edit.setIcon(new ImageIcon("resource/images/tick.png"));
+			edit.setIcon(new ImageIcon("C:\\java-ws\\StudManagProj\\resource\\images\\tick.png"));
 			edit.setBounds(393, 116, 37, 20);
 			edit.setVisible(false);
 			edit.addActionListener(new ActionListener() {
@@ -1144,7 +1160,7 @@ public class StudentScreen extends JFrame {
 		btngrp().clearSelection();
 	}
 
-	public void showMessage(String m) {
+	private void showMessage(String m) {
 		message.setText(m);
 		btnClear.setVisible(true);
 

@@ -58,8 +58,6 @@ public class Register extends JFrame {
 	private JLabel message;
 	private JCheckBox show;
 	private JTextArea showPassword;
-	private JButton ok;
-	private JLabel lblYouHaveEntered;
 	private JButton btnCancel;
 	private JButton btnHelp;
 	private JLabel label;
@@ -72,18 +70,18 @@ public class Register extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Register frame = new Register();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	// public static void main(String[] args) {
+	// EventQueue.invokeLater(new Runnable() {
+	// public void run() {
+	// try {
+	// Register frame = new Register();
+	// frame.setVisible(true);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// }
 
 	/**
 	 * Create the frame.
@@ -103,11 +101,11 @@ public class Register extends JFrame {
 		contentPane.add(getPanel_4(), BorderLayout.CENTER);
 		try {
 			showAllUser();
-		} catch (ClassNotFoundException|SQLException|ParseException e) {
-			
+		} catch (ClassNotFoundException | SQLException | ParseException e) {
+
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private JPanel getPanel() {
@@ -184,8 +182,6 @@ public class Register extends JFrame {
 			panel_5.add(getPassword());
 			panel_5.add(getShow());
 			panel_5.add(getShowPassword());
-			panel_5.add(getOk());
-			panel_5.add(getLblYouHaveEntered());
 			panel_5.add(getBtnCancel());
 			panel_5.add(getRegister());
 		}
@@ -331,7 +327,7 @@ public class Register extends JFrame {
 	private JPasswordField getPassword() {
 		if (password == null) {
 			password = new JPasswordField();
-			password.setBounds(106, 91, 190, 29);
+			password.setBounds(106, 91, 190, 32);
 		}
 		return password;
 	}
@@ -370,7 +366,7 @@ public class Register extends JFrame {
 					} else if (ut.equals("")) {
 						showMessage("User Type should be selected");
 					}
-
+           
 					else {
 						
 						User user = getUserForm();
@@ -378,14 +374,19 @@ public class Register extends JFrame {
 						UserDao userDao = new UserDao();
 						try {
 							userDao.save(user);
+							
+							
 							showAllUser();
+							
+							showMessage("Data added successfully");
 						} catch (ClassNotFoundException|ParseException|SQLException e1) {
 							e1.printStackTrace();
 						}
 						
 						clearform();
 						
-						showMessage("Data added successfully");
+						
+						
 
 					}
 				}
@@ -393,19 +394,19 @@ public class Register extends JFrame {
 		}
 		return register;
 	}
-	private void showMessage(String m){
-		message.setText(m);
-	Timer t = new Timer(4000, new ActionListener() {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            message.setText("");
-        }
-    });
-    t.setRepeats(false);
-    t.start();
-}
-	
+	private void showMessage(String m) {
+		message.setText(m);
+		Timer t = new Timer(4000, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				message.setText("");
+			}
+		});
+		t.setRepeats(false);
+		t.start();
+	}
 
 	public User getUserForm() {
 
@@ -466,7 +467,7 @@ public class Register extends JFrame {
 	private JCheckBox getShow() {
 		if (show == null) {
 			show = new JCheckBox("show");
-			show.setBounds(302, 91, 66, 29);
+			show.setBounds(305, 91, 63, 29);
 			show.addActionListener(new ActionListener() {
 
 				@Override
@@ -477,8 +478,8 @@ public class Register extends JFrame {
 						showPassword.setVisible(true);
 						showPassword.setText(pass);
 						password.setVisible(false);
-						// ok.setVisible(true);
-						lblYouHaveEntered.setVisible(true);
+						
+						
 
 					}
 					if (!show.isSelected()) {
@@ -488,7 +489,7 @@ public class Register extends JFrame {
 						// ok.setVisible(false);
 						show.setSelected(false);
 						password.setText(showPassword.getText());
-						lblYouHaveEntered.setVisible(false);
+						
 					}
 
 				}
@@ -500,43 +501,11 @@ public class Register extends JFrame {
 	private JTextArea getShowPassword() {
 		if (showPassword == null) {
 			showPassword = new JTextArea();
-			showPassword.setBounds(106, 93, 190, 27);
+			showPassword.setBounds(106, 93, 190, 29);
 			showPassword.setVisible(false);
 
 		}
 		return showPassword;
-	}
-
-	private JButton getOk() {
-		if (ok == null) {
-			ok = new JButton("ok");
-			ok.setBounds(305, 113, 63, 20);
-			ok.setVisible(false);
-			ok.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					showPassword.setVisible(false);
-					password.setVisible(true);
-					ok.setVisible(false);
-					show.setSelected(false);
-					password.setText(showPassword.getText());
-					lblYouHaveEntered.setVisible(false);
-
-				}
-			});
-
-		}
-		return ok;
-	}
-
-	private JLabel getLblYouHaveEntered() {
-		if (lblYouHaveEntered == null) {
-			lblYouHaveEntered = new JLabel("You Typed:");
-			lblYouHaveEntered.setBounds(106, 91, 63, 29);
-			lblYouHaveEntered.setVisible(false);
-		}
-		return lblYouHaveEntered;
 	}
 
 	private void actualPassword() {
@@ -583,26 +552,26 @@ public class Register extends JFrame {
 			btnHelp.setForeground(Color.BLUE);
 			btnHelp.setBounds(22, 332, 89, 29);
 			btnHelp.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-showMessage("Working on it, Just for you !!");
-
-
+					showMessage("Working on it, Just for you !!");
 
 				}
 			});
 		}
 		return btnHelp;
 	}
+
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel("");
 			label.setBounds(402, 11, 156, 283);
-			label.setIcon(new ImageIcon("resource/images/mankey.jpg"));
+			label.setIcon(new ImageIcon("C:\\java-ws\\StudManagProj\\resource\\images\\mankey.jpg"));
 		}
 		return label;
 	}
+
 	private JLabel getLblListOfThe() {
 		if (lblListOfThe == null) {
 			lblListOfThe = new JLabel("Data Of All The Registered Users");
@@ -610,6 +579,7 @@ showMessage("Working on it, Just for you !!");
 		}
 		return lblListOfThe;
 	}
+
 	private JScrollPane getScrollPane_1() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -618,25 +588,20 @@ showMessage("Working on it, Just for you !!");
 		}
 		return scrollPane;
 	}
+
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
-			table.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-					"ID", "Full Name", "Username", "Password", "Email", "Gender", "User Type"
-				}
-			));
+			table.setModel(new DefaultTableModel(new Object[][] {},
+					new String[] { "ID", "Full Name", "Username", "Password",
+							"Email", "Gender", "User Type" }));
 		}
 		return table;
 	}
-	
-	
-	
-	private void showAllUser() throws ClassNotFoundException, SQLException, ParseException{
-		
-		
+
+	private void showAllUser() throws ClassNotFoundException, SQLException,
+			ParseException {
+
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0); // Clear Table
 
@@ -644,17 +609,14 @@ showMessage("Working on it, Just for you !!");
 		UserDao userDao = new UserDao();
 		List<User> userList = userDao.getAllUser();
 		for (User user : userList) {
-			System.out.println(user);
+			// System.out.println(user);
 			model.addRow(new Object[] { user.getId(), user.getFullName(),
 					user.getUsername(), user.getPassword(), user.getEmail(),
-					user.getGender(),user.getUserType() });
+					user.getGender(), user.getUserType() });
 		}
-		
+
 	}
-	
-	
-	
-	
+
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("Copy Right  \u00A9 Gajurel Dinesh 2016");
@@ -662,9 +624,11 @@ showMessage("Working on it, Just for you !!");
 		}
 		return lblNewLabel;
 	}
+
 	private JLabel getLblStudentManagementSystemsms() {
 		if (lblStudentManagementSystemsms == null) {
-			lblStudentManagementSystemsms = new JLabel("Student  Management System(SMS)");
+			lblStudentManagementSystemsms = new JLabel(
+					"Student  Management System(SMS)");
 			lblStudentManagementSystemsms.setBounds(185, 535, 215, 14);
 		}
 		return lblStudentManagementSystemsms;

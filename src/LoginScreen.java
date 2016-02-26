@@ -5,7 +5,16 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,7 +31,6 @@ import javax.swing.border.TitledBorder;
 
 import model.User;
 import dao.UserDao;
-import javax.swing.JSeparator;
 
 public class LoginScreen extends JFrame {
 
@@ -44,37 +52,41 @@ public class LoginScreen extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	static LoginScreen frame = new LoginScreen();
+	// static LoginScreen frame = new LoginScreen();
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
-	private JCheckBox chckbxRememberMe;
+	private JCheckBox rememberMe;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
 	private JLabel lblStudentManagementSystem;
 	private JButton register;
 	private JButton forget;
+	private JCheckBox show;
+	private JTextField showPassword;
+	private JButton btnA;
+	private JLabel lblNewRegisterBelow;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-//					//MySqlConnection m=new MySqlConnection();
-//					Connection c=MySqlConnection.getConnection();
-//					String s=c.toString();
-//					System.out.println("the string is "+s);
-				
-//				if(s.equals("")){
-//					
-//					System.out.println("Connection failed");
-//				
-//					
-//				}else{
-					//Thread.sleep(4000);
-				LoginScreen frame = new LoginScreen();
-				frame.setVisible(true);
-				
-				WindowManager.ui.put("LoginScreen", frame);
-//				}
+					// //MySqlConnection m=new MySqlConnection();
+					// Connection c=MySqlConnection.getConnection();
+					// String s=c.toString();
+					// System.out.println("the string is "+s);
+
+					// if(s.equals("")){
+					//
+					// System.out.println("Connection failed");
+					//
+					//
+					// }else{
+					Thread.sleep(4000);
+					LoginScreen frame = new LoginScreen();
+					frame.setVisible(true);
+
+					WindowManager.ui.put("LoginScreen", frame);
+					// }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -90,9 +102,9 @@ public class LoginScreen extends JFrame {
 		setIconImage(Toolkit
 				.getDefaultToolkit()
 				.getImage(
-						"C:\\Users\\DELL\\Desktop\\New folder (3)\\key-login-form-22847438.jpg"));
+						"C:\\java-ws\\StudManagProj\\resource\\images\\key-login-form-22847438.jpg"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 581, 341);
+		setBounds(100, 100, 604, 366);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -102,6 +114,7 @@ public class LoginScreen extends JFrame {
 		contentPane.add(getBottomPanel(), BorderLayout.SOUTH);
 		contentPane.add(getRightPanel(), BorderLayout.EAST);
 		contentPane.add(getCenterpanel(), BorderLayout.CENTER);
+
 	}
 
 	private JPanel getTopPanel() {
@@ -154,6 +167,8 @@ public class LoginScreen extends JFrame {
 			Centerpanel.add(getLblNewLabel_3());
 			Centerpanel.add(getLblStudentManagementSystem());
 			Centerpanel.add(getRegister());
+			Centerpanel.add(getBtnA());
+			Centerpanel.add(getLblNewRegisterBelow());
 		}
 		return Centerpanel;
 	}
@@ -163,15 +178,17 @@ public class LoginScreen extends JFrame {
 			LoginPanel = new JPanel();
 			LoginPanel.setBorder(new TitledBorder(null, "Log In",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			LoginPanel.setBounds(10, 28, 517, 173);
+			LoginPanel.setBounds(10, 28, 538, 173);
 			LoginPanel.setLayout(null);
 			LoginPanel.add(getLblUsername(), "2, 2, fill, center");
 			LoginPanel.add(getLblPassword(), "2, 4, fill, center");
 			LoginPanel.add(getUsername(), "4, 2, fill, fill");
 			LoginPanel.add(getPassword(), "4, 4, fill, fill");
 			LoginPanel.add(getLblNewLabel_1());
-			LoginPanel.add(getChckbxRememberMe());
+			LoginPanel.add(getRememberMe());
 			LoginPanel.add(getForget());
+			LoginPanel.add(getShow());
+			LoginPanel.add(getShowPassword());
 		}
 		return LoginPanel;
 	}
@@ -195,7 +212,7 @@ public class LoginScreen extends JFrame {
 	private JTextField getUsername() {
 		if (username == null) {
 			username = new JTextField();
-			username.setBounds(86, 30, 255, 32);
+			username.setBounds(86, 30, 228, 32);
 			username.setColumns(10);
 		}
 		return username;
@@ -204,8 +221,53 @@ public class LoginScreen extends JFrame {
 	private JPasswordField getPassword() {
 		if (password == null) {
 			password = new JPasswordField();
-			password.setEchoChar('*');
-			password.setBounds(86, 73, 255, 32);
+			password.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+
+					// if(Event.KEY_PRESS==KeyEvent.VK_ENTER){
+					//
+					//
+					//
+					//
+					// String pass = new String(password.getPassword());
+					// String usr = new String(username.getText());
+					// User user = new User();
+					// user.setUsername(usr);
+					// user.setPassword(pass);
+					//
+					// UserDao userDao = new UserDao();
+					// boolean valid;
+					// try {
+					// valid = userDao.validateUser(user);
+					//
+					// if (valid) {
+					// SwitchWindow();
+					// JOptionPane.showMessageDialog(null,
+					// "you have successfully entered to the system. Mr/mrs/miss "
+					// + username.getText());
+					// } else if (username.getText().equals("")
+					// && pass.equals("")) {
+					// showStatus("Username and password can't be blank", 3);;
+					// } else {
+					// showStatus(username.getText()
+					// + "  is not valid username or password is wrong", 3);
+					// password.setText("");
+					// }
+					//
+					// } catch (ClassNotFoundException | SQLException e1) {
+					// // TODO Auto-generated catch block
+					// e1.printStackTrace();
+					// }
+					//
+					//
+					//
+					// }
+					//
+
+				}
+			});
+			password.setBounds(86, 73, 228, 32);
 		}
 		return password;
 	}
@@ -214,7 +276,7 @@ public class LoginScreen extends JFrame {
 		if (status == null) {
 			status = new JLabel("");
 			status.setForeground(new Color(128, 128, 0));
-			status.setBounds(149, 202, 325, 29);
+			status.setBounds(236, 204, 292, 29);
 		}
 		return status;
 	}
@@ -228,9 +290,19 @@ public class LoginScreen extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					
-						String pass = new String(password.getPassword());
-						String usr = new String(username.getText());
+					if (show.isSelected()) {
+						password.setText(showPassword.getText());
+
+					}
+
+					String pass = new String(password.getPassword());
+					String usr = new String(username.getText());
+
+					if (pass.equals("") | usr.equals("")) {
+						showStatus("Username and Password can't be blank.", 4);
+					}
+
+					else {
 						User user = new User();
 						user.setUsername(usr);
 						user.setPassword(pass);
@@ -241,16 +313,28 @@ public class LoginScreen extends JFrame {
 							valid = userDao.validateUser(user);
 
 							if (valid) {
-								SwitchWindow();
-								JOptionPane.showMessageDialog(null,
-										"you have successfully entered to the system. Mr/mrs/miss "
-												+ username.getText());
-							} else if (username.getText().equals("")
-									&& pass.equals("")) {
-								showStatus("Username and password can't be blank", 3);;
+
+								if (rememberMe.isSelected()) {
+									try {
+										FileOutputStream fi = new FileOutputStream(
+												"E:\\sms\\m.txt");
+										String s = new String(usr);
+										byte b[] = s.getBytes();
+										fi.write(b);
+										fi.close();
+
+									} catch (IOException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+								}
+								SwitchWindow(usr);
+								// JOptionPane.showMessageDialog(null,
+								// "you have successfully entered to the system. Mr/mrs/miss "
+								// + username.getText());
 							} else {
-								showStatus(username.getText()
-										+ "  is not valid username or password is wrong", 3);
+								showStatus("Invalid Username and Password.", 3);
+
 							}
 
 						} catch (ClassNotFoundException | SQLException e1) {
@@ -259,7 +343,7 @@ public class LoginScreen extends JFrame {
 						}
 
 					}
-				
+				}
 
 			});
 		}
@@ -270,13 +354,15 @@ public class LoginScreen extends JFrame {
 		if (cancel == null) {
 			cancel = new JButton("");
 			cancel.setIcon(new ImageIcon(
-					"resource/images/cross.jpg"));
-			cancel.setBounds(495, 235, 32, 29);
+					"C:\\java-ws\\StudManagProj\\resource\\images\\cross.jpg"));
+			cancel.setBounds(516, 242, 32, 29);
 			cancel.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
+					//System.exit(0);
+					LoginScreen l=(LoginScreen) WindowManager.ui.get("LoginScreen");
+					l.dispose();
 				}
 			});
 		}
@@ -299,35 +385,37 @@ public class LoginScreen extends JFrame {
 			lblNewLabel_1 = new JLabel("");
 			lblNewLabel_1.setBackground(Color.LIGHT_GRAY);
 			lblNewLabel_1.setForeground(new Color(64, 224, 208));
-			lblNewLabel_1.setIcon(new ImageIcon(
-					"resource/images/enter-key.png"));
-			lblNewLabel_1.setBounds(351, 11, 156, 154);
+			lblNewLabel_1
+					.setIcon(new ImageIcon(
+							"C:\\java-ws\\StudManagProj\\resource\\images\\enter-key.png"));
+			lblNewLabel_1.setBounds(375, 11, 153, 154);
 		}
 		return lblNewLabel_1;
 	}
 
-	private JCheckBox getChckbxRememberMe() {
-		if (chckbxRememberMe == null) {
-			chckbxRememberMe = new JCheckBox("Remember me");
-			chckbxRememberMe.setBounds(50, 112, 112, 53);
-			chckbxRememberMe.addActionListener(new ActionListener() {
+	private JCheckBox getRememberMe() {
+		if (rememberMe == null) {
+			rememberMe = new JCheckBox("Remember me");
+			rememberMe.setBounds(50, 112, 112, 53);
+			rememberMe.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(chckbxRememberMe.isSelected()){
-						showStatus("Working on it, Just for you !!", 3);
-					}
+if(rememberMe.isSelected()){
+	showStatus("You will be kept logged in.", 3);
+}					
 				}
 			});
+
 		}
-		return chckbxRememberMe;
+		return rememberMe;
 	}
 
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
 			lblNewLabel_2 = new JLabel("Cancel");
 			lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			lblNewLabel_2.setBounds(445, 235, 38, 31);
+			lblNewLabel_2.setBounds(468, 245, 38, 26);
 		}
 		return lblNewLabel_2;
 	}
@@ -336,7 +424,7 @@ public class LoginScreen extends JFrame {
 		if (lblNewLabel_3 == null) {
 			lblNewLabel_3 = new JLabel("Copy Right  \u00A9 Gajurel Dinesh 2016");
 			lblNewLabel_3.setFont(new Font("Tahoma", Font.ITALIC, 10));
-			lblNewLabel_3.setBounds(186, 235, 221, 20);
+			lblNewLabel_3.setBounds(245, 267, 216, 15);
 		}
 		return lblNewLabel_3;
 	}
@@ -347,16 +435,16 @@ public class LoginScreen extends JFrame {
 					"Student  Management System(SMS)");
 			lblStudentManagementSystem.setFont(new Font("Tahoma", Font.ITALIC,
 					10));
-			lblStudentManagementSystem.setBounds(186, 253, 221, 12);
+			lblStudentManagementSystem.setBounds(245, 280, 204, 15);
 		}
 		return lblStudentManagementSystem;
 	}
 
-	private void SwitchWindow() {
+	private void SwitchWindow(String usr) {
 		clearScreen();
 		StudentScreen studScr = new StudentScreen();
-		studScr.getActiveUser().setText(username.getText().toUpperCase());
-		
+		studScr.getActiveUser().setText(usr.toUpperCase());
+
 		studScr.setVisible(true);
 		WindowManager.ui.put("StudentScreen", studScr);
 		LoginScreen loginScr = (LoginScreen) WindowManager.ui
@@ -367,53 +455,165 @@ public class LoginScreen extends JFrame {
 	public void clearScreen() {
 		password.setText("");
 		status.setText("");
+		rememberMe.setSelected(false);
 	}
-	public void showStatus(String s,int a){
-		status.setText(s);
-		Timer t = new Timer((a*1000), new ActionListener() {
 
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            status.setText("");
-	        }
-	    });
-	    t.setRepeats(false);
-	    t.start();
+	public void showStatus(String s, int a) {
+		status.setText(s);
+		Timer t = new Timer((a * 1000), new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				status.setText("");
+			}
+		});
+		t.setRepeats(false);
+		t.start();
 	}
+
 	private JButton getRegister() {
 		if (register == null) {
 			register = new JButton("Register?");
-			register.setBounds(10, 235, 104, 29);
+			register.setBounds(10, 239, 101, 32);
 			register.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Register reg=new Register();
+					Register reg = new Register();
 					reg.setVisible(true);
 					WindowManager.ui.put("Register", reg);
-				LoginScreen	loginScr= (LoginScreen)WindowManager.ui.get("LoginScreen");
-				loginScr.setVisible(false);
-				clearScreen();
-				username.setText("");
+					LoginScreen loginScr = (LoginScreen) WindowManager.ui
+							.get("LoginScreen");
+					loginScr.setVisible(false);
+					clearScreen();
+					username.setText("");
 				}
 			});
-			
+
 		}
 		return register;
 	}
+
 	private JButton getForget() {
 		if (forget == null) {
 			forget = new JButton("Forgot your password ?");
 			forget.setBackground(Color.LIGHT_GRAY);
-			forget.setBounds(168, 124, 173, 32);
+			forget.setBounds(192, 124, 174, 32);
 			forget.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-				showStatus("Working on it, Just for you !! ",2 );	
+
+					clearScreen();
+
+					Recovery rec = new Recovery();
+
+					rec.setVisible(true);
+					WindowManager.ui.put("Recovery", rec);
+					LoginScreen loginScr = (LoginScreen) WindowManager.ui
+							.get("LoginScreen");
+					loginScr.setVisible(false);
+
 				}
 			});
 		}
 		return forget;
+	}
+
+	private JCheckBox getShow() {
+		if (show == null) {
+			show = new JCheckBox("Show");
+			show.setBounds(313, 78, 57, 23);
+			show.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (show.isSelected()) {
+						String s = new String(password.getPassword());
+						showPassword.setVisible(true);
+						showPassword.setText(s);
+						password.setVisible(false);
+
+					} else if (!show.isSelected()) {
+						password.setText(showPassword.getText());
+						showPassword.setVisible(false);
+						password.setVisible(true);
+					}
+				}
+			});
+		}
+		return show;
+	}
+
+	private JTextField getShowPassword() {
+		if (showPassword == null) {
+			showPassword = new JTextField();
+			showPassword.setBounds(86, 73, 228, 32);
+			showPassword.setColumns(10);
+			showPassword.setVisible(false);
+		}
+		return showPassword;
+	}
+
+	private JButton getBtnA() {
+		if (btnA == null) {
+			btnA = new JButton("Logged In ?");
+			btnA.setBounds(105, 202, 101, 29);
+			btnA.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					LoggedIn();
+
+				}
+			});
+		}
+		return btnA;
+	}
+
+	private String readFile(String pathname) throws IOException {
+
+		File file = new File(pathname);
+		StringBuilder fileContents = new StringBuilder((int) file.length());
+		Scanner scanner = new Scanner(file);
+		String lineSeparator = System.getProperty("line.separator");
+
+		try {
+			while (scanner.hasNextLine()) {
+				fileContents.append(scanner.nextLine() + lineSeparator);
+			}
+			return fileContents.toString();
+		} finally {
+			scanner.close();
+		}
+	}
+
+	private void LoggedIn() {
+
+		try {
+			String s = readFile("E:\\sms\\m.txt");
+			if (!s.equals("")) {
+
+				SwitchWindow(s);
+			} else {
+
+				showStatus(" Sorry,No user has been logged in.", 3);
+			}
+
+		} catch (IOException ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		}
+
+	}
+	private JLabel getLblNewRegisterBelow() {
+		if (lblNewRegisterBelow == null) {
+			lblNewRegisterBelow = new JLabel("NEW ?? Register Now !!");
+			lblNewRegisterBelow.setForeground(new Color(0, 0, 255));
+			lblNewRegisterBelow.setBackground(Color.BLUE);
+			lblNewRegisterBelow.setBounds(115, 244, 160, 27);
+		}
+		return lblNewRegisterBelow;
 	}
 }

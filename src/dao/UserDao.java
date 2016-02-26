@@ -9,7 +9,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Student;
+
 import model.User;
 
 public class UserDao {
@@ -69,6 +69,9 @@ public class UserDao {
 		
 		return users;
 	}
+	
+	
+	
 	public User copyResultToUser(ResultSet rs) throws SQLException,
 	ParseException {
 User user = new User();
@@ -83,5 +86,29 @@ user.setUserType(rs.getString("usertype"));
 
 return user;
 }
+	
+	
+	
+	
+	
+public String getSearchedUser(String uname,String em) throws ClassNotFoundException, SQLException, ParseException{
+		
+		
+		Connection con=MySqlConnection.getConnection();
+		Statement stmt=con.createStatement();
+		ResultSet rs=stmt.executeQuery("select * from user where username='"+uname+"' and email = '"+em+"'");
+		
+		String pass="";
+		while(rs.next()){
+			 pass=rs.getString("password");
+			
+		}
+		
+		
+		return pass;
+	}
+	
+	
+	
 
 }
