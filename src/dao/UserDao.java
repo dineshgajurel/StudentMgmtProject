@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import model.User;
 
 public class UserDao {
@@ -45,7 +44,7 @@ public class UserDao {
 		PreparedStatement stmt=con.prepareStatement("insert into user(id,username,password,email,fullname,gender,usertype) values(?,?,?,?,?,?,?) ");
 		stmt.setInt(1, id);
 		stmt.setString(2, username);
-		stmt.setString(3, password);
+		stmt.setString(3,(password));
 		stmt.setString(4, email);
 		stmt.setString(5, fullName);
 		stmt.setString(6, gender);

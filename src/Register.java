@@ -379,11 +379,13 @@ public class Register extends JFrame {
 							showAllUser();
 							
 							showMessage("Data added successfully");
+							clearform();
 						} catch (ClassNotFoundException|ParseException|SQLException e1) {
 							e1.printStackTrace();
 						}
 						
-						clearform();
+						
+						
 						
 						
 						

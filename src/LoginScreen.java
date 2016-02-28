@@ -63,7 +63,6 @@ public class LoginScreen extends JFrame {
 	private JButton forget;
 	private JCheckBox show;
 	private JTextField showPassword;
-	private JButton btnA;
 	private JLabel lblNewRegisterBelow;
 
 	public static void main(String[] args) {
@@ -86,6 +85,8 @@ public class LoginScreen extends JFrame {
 					frame.setVisible(true);
 
 					WindowManager.ui.put("LoginScreen", frame);
+					frame.loggedIn();
+
 					// }
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -104,7 +105,7 @@ public class LoginScreen extends JFrame {
 				.getImage(
 						"C:\\java-ws\\StudManagProj\\resource\\images\\key-login-form-22847438.jpg"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 604, 366);
+		setBounds(100, 100, 604, 342);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -167,7 +168,6 @@ public class LoginScreen extends JFrame {
 			Centerpanel.add(getLblNewLabel_3());
 			Centerpanel.add(getLblStudentManagementSystem());
 			Centerpanel.add(getRegister());
-			Centerpanel.add(getBtnA());
 			Centerpanel.add(getLblNewRegisterBelow());
 		}
 		return Centerpanel;
@@ -322,6 +322,9 @@ public class LoginScreen extends JFrame {
 										byte b[] = s.getBytes();
 										fi.write(b);
 										fi.close();
+										
+										
+												
 
 									} catch (IOException e1) {
 										// TODO Auto-generated catch block
@@ -329,9 +332,26 @@ public class LoginScreen extends JFrame {
 									}
 								}
 								SwitchWindow(usr);
-								// JOptionPane.showMessageDialog(null,
-								// "you have successfully entered to the system. Mr/mrs/miss "
-								// + username.getText());
+
+								Timer t = new Timer(((30*60) * 1000), new ActionListener() {
+
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										FileOutputStream fi;
+										try {
+											fi = new FileOutputStream("E:\\sms\\m.txt");
+											String s=new String("");
+											byte b[]=s.getBytes();
+											fi.write(b);
+											fi.close();
+										} catch (IOException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+									}
+								});
+								t.setRepeats(false);
+								t.start();
 							} else {
 								showStatus("Invalid Username and Password.", 3);
 
@@ -360,8 +380,9 @@ public class LoginScreen extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//System.exit(0);
-					LoginScreen l=(LoginScreen) WindowManager.ui.get("LoginScreen");
+					// System.exit(0);
+					LoginScreen l = (LoginScreen) WindowManager.ui
+							.get("LoginScreen");
 					l.dispose();
 				}
 			});
@@ -398,12 +419,12 @@ public class LoginScreen extends JFrame {
 			rememberMe = new JCheckBox("Remember me");
 			rememberMe.setBounds(50, 112, 112, 53);
 			rememberMe.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-if(rememberMe.isSelected()){
-	showStatus("You will be kept logged in.", 3);
-}					
+					if (rememberMe.isSelected()) {
+						showStatus("You will be kept logged in.", 3);
+					}
 				}
 			});
 
@@ -424,7 +445,7 @@ if(rememberMe.isSelected()){
 		if (lblNewLabel_3 == null) {
 			lblNewLabel_3 = new JLabel("Copy Right  \u00A9 Gajurel Dinesh 2016");
 			lblNewLabel_3.setFont(new Font("Tahoma", Font.ITALIC, 10));
-			lblNewLabel_3.setBounds(245, 267, 216, 15);
+			lblNewLabel_3.setBounds(236, 244, 216, 15);
 		}
 		return lblNewLabel_3;
 	}
@@ -435,7 +456,7 @@ if(rememberMe.isSelected()){
 					"Student  Management System(SMS)");
 			lblStudentManagementSystem.setFont(new Font("Tahoma", Font.ITALIC,
 					10));
-			lblStudentManagementSystem.setBounds(245, 280, 204, 15);
+			lblStudentManagementSystem.setBounds(236, 256, 204, 15);
 		}
 		return lblStudentManagementSystem;
 	}
@@ -474,7 +495,7 @@ if(rememberMe.isSelected()){
 	private JButton getRegister() {
 		if (register == null) {
 			register = new JButton("Register?");
-			register.setBounds(10, 239, 101, 32);
+			register.setBounds(10, 233, 101, 29);
 			register.addActionListener(new ActionListener() {
 
 				@Override
@@ -555,23 +576,6 @@ if(rememberMe.isSelected()){
 		return showPassword;
 	}
 
-	private JButton getBtnA() {
-		if (btnA == null) {
-			btnA = new JButton("Logged In ?");
-			btnA.setBounds(105, 202, 101, 29);
-			btnA.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					LoggedIn();
-
-				}
-			});
-		}
-		return btnA;
-	}
-
 	private String readFile(String pathname) throws IOException {
 
 		File file = new File(pathname);
@@ -589,13 +593,14 @@ if(rememberMe.isSelected()){
 		}
 	}
 
-	private void LoggedIn() {
+	private void loggedIn() {
 
 		try {
 			String s = readFile("E:\\sms\\m.txt");
 			if (!s.equals("")) {
 
 				SwitchWindow(s);
+				
 			} else {
 
 				showStatus(" Sorry,No user has been logged in.", 3);
@@ -607,12 +612,13 @@ if(rememberMe.isSelected()){
 		}
 
 	}
+
 	private JLabel getLblNewRegisterBelow() {
 		if (lblNewRegisterBelow == null) {
-			lblNewRegisterBelow = new JLabel("NEW ?? Register Now !!");
+			lblNewRegisterBelow = new JLabel("NEW ? Register Now!");
 			lblNewRegisterBelow.setForeground(new Color(0, 0, 255));
 			lblNewRegisterBelow.setBackground(Color.BLUE);
-			lblNewRegisterBelow.setBounds(115, 244, 160, 27);
+			lblNewRegisterBelow.setBounds(115, 233, 160, 29);
 		}
 		return lblNewRegisterBelow;
 	}
